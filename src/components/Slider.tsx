@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import SideRectangle from "./sideRect";
 import dynamic from "next/dynamic";
 
@@ -39,7 +39,7 @@ const Slider = () => {
 					<SideRectangle text="BODY" />
 				</div>
 
-				<div className="col-span-12 lg:col-span-6 h-full relative flex flex-col items-center justify-between gap-12">
+				<div className="col-span-12 lg:col-span-6 h-full relative flex flex-col items-center justify-end gap-12">
 					<div
 						className="hidden xl:block absolute w-[450px] h-[450px] rounded-full top-[35%] transform -translate-y-1/2"
 						style={{
@@ -60,7 +60,15 @@ const Slider = () => {
 							height={48}
 						/>
 					</button>
-					<NFT index={currentIndex} />
+					<Suspense
+						fallback={
+							<div className="!h-[48vh] text-white flex items-center justify-center">
+								<div className="animate-spin rounded-full h-8 w-8 border-t-4 border-b-4 border-blue-500"></div>
+							</div>
+						}
+					>
+						<NFT index={currentIndex} />
+					</Suspense>
 					<button
 						onClick={handleNext}
 						className="absolute lg:right-0 !z-15 top-1/4 transform translate-x-32 lg:translate-x-12 -translate-y-1/2 flex items-center justify-center w-12 h-12"
