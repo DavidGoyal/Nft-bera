@@ -48,16 +48,7 @@ const NFT = ({ index }: { index: number }) => {
 			/>
 			<Suspense fallback={<div>Loading...</div>}>
 				<mesh>
-					<hemisphereLight intensity={4} groundColor="black" />
-					<pointLight intensity={10} />
-					<spotLight
-						position={[-20, 50, 10]}
-						angle={0.12}
-						penumbra={1}
-						intensity={1}
-						castShadow
-						shadow-mapSize={1024}
-					/>
+					<hemisphereLight intensity={5} groundColor="black" />
 					<primitive
 						object={myModel.scene}
 						scale={isMobile ? 0.72 : 0.75}
