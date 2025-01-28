@@ -1,8 +1,11 @@
 "use client";
+
 import Image from "next/image";
 import { useState } from "react";
-import { NFT } from "./3D/nft";
 import SideRectangle from "./sideRect";
+import dynamic from "next/dynamic";
+
+const NFT = dynamic(() => import("./3D/nft"), { ssr: false });
 
 const Slider = () => {
 	const images = [
