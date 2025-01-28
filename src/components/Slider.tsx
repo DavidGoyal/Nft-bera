@@ -49,12 +49,13 @@ const Slider = () => {
 					></div>
 					<button
 						onClick={handlePrev}
-						className="absolute lg:left-0 z-10 top-1/4 transform -translate-x-32 lg:-translate-x-12 -translate-y-1/2 flex items-center justify-center w-12 h-12 "
+						className="absolute lg:left-0 !z-15 top-1/4 transform -translate-x-32 lg:-translate-x-12 -translate-y-1/2 flex items-center justify-center w-12 h-12"
+						style={{ zIndex: 100 }}
 					>
 						<Image
 							src="/Polygon 7.png"
 							alt="Left Arrow"
-							className="w-full h-full object-contain"
+							className="w-full h-full object-contain z-15"
 							width={48}
 							height={48}
 						/>
@@ -62,12 +63,13 @@ const Slider = () => {
 					<NFT index={currentIndex} />
 					<button
 						onClick={handleNext}
-						className="absolute lg:right-0 top-1/4 transform translate-x-32 lg:translate-x-12 -translate-y-1/2 flex items-center justify-center w-12 h-12"
+						className="absolute lg:right-0 !z-15 top-1/4 transform translate-x-32 lg:translate-x-12 -translate-y-1/2 flex items-center justify-center w-12 h-12"
+						style={{ zIndex: 100 }}
 					>
 						<Image
 							src="/Polygon 2.png"
 							alt="Right Arrow"
-							className="w-full h-full object-contain"
+							className="w-full h-full object-contain z-15"
 							width={48}
 							height={48}
 						/>
