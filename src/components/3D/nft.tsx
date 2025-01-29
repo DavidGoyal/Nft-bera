@@ -3,17 +3,18 @@
 import { OrbitControls, Preload, useGLTF } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { Suspense, useEffect, useState } from "react";
+const models = [
+	"/panda1.glb",
+	"/panda2.glb",
+	"/panda3.glb",
+	"/panda4.glb",
+	"/panda5.glb",
+];
 
 const NFT = ({ index }: { index: number }) => {
-	const models = [
-		"/panda1.glb",
-		"/panda2.glb",
-		"/panda3.glb",
-		"/panda4.glb",
-		"/panda5.glb",
-	];
+	// Use `useGLTF`, which supports DRACO automatically
+	const { scene } = useGLTF(models[index] ?? "/panda1.glb", true);
 
-	const myModel = useGLTF(models[index] ?? "/panda1.glb");
 	const [isMobile, setIsMobile] = useState(false);
 
 	useEffect(() => {
@@ -21,8 +22,7 @@ const NFT = ({ index }: { index: number }) => {
 
 		setIsMobile(mediaQuery.matches);
 
-		//@ts-expect-error - type is unknown
-		const handleMediaQueryChange = (event) => {
+		const handleMediaQueryChange = (event: MediaQueryListEvent) => {
 			setIsMobile(event.matches);
 		};
 
@@ -50,7 +50,7 @@ const NFT = ({ index }: { index: number }) => {
 				<mesh>
 					<hemisphereLight intensity={5} groundColor="black" />
 					<primitive
-						object={myModel.scene}
+						object={scene}
 						scale={isMobile ? 0.72 : 0.75}
 						position={[0, -4.2, 0]}
 						rotation={[-0.04, -5, 0.03]}
@@ -61,5 +61,8 @@ const NFT = ({ index }: { index: number }) => {
 		</Canvas>
 	);
 };
+
+// Preload all GLTF models to optimize loading
+models.forEach((model) => useGLTF.preload(model));
 
 export default NFT;
