@@ -8,25 +8,23 @@ import dynamic from "next/dynamic";
 const NFT = dynamic(() => import("./3D/nft"), { ssr: false });
 
 const Slider = () => {
-	const images = [
-		"/glbimage1.png",
-		"/glbimage2.png",
-		"/glbimage3.png",
-		"/glbimage4.png",
-		"/glbimage5.png",
-	];
 	const [currentIndex, setCurrentIndex] = useState<number>(0);
 
 	const handlePrev = () => {
-		setCurrentIndex((currentIndex - 1 + images.length) % images.length);
+		const index = (currentIndex - 1 + 5) % 5;
+		setCurrentIndex((currentIndex - 1 + 5) % 5);
+		localStorage.setItem("currentIndex", (index + 105).toString());
 	};
 
 	const handleNext = () => {
-		setCurrentIndex((currentIndex + 1) % images.length);
+		const index = (currentIndex + 1) % 5;
+		setCurrentIndex((currentIndex + 1) % 5);
+		localStorage.setItem("currentIndex", (index + 105).toString());
 	};
 
 	const updateMainImage = (index: number) => {
 		setCurrentIndex(index);
+		localStorage.setItem("currentIndex", (index + 105).toString());
 	};
 
 	return (
@@ -112,7 +110,7 @@ const Slider = () => {
 			</div>
 
 			<div className="hidden lg:flex justify-center items-end gap-12 w-full h-[10vh] mt-10">
-				{images.map((img, index) => (
+				{Array.from({ length: 5 }).map((_, index) => (
 					<button
 						key={index}
 						className={`w-16 h-16 rounded-lg overflow-hidden border-2 ${
@@ -120,10 +118,12 @@ const Slider = () => {
 						}`}
 						onClick={() => updateMainImage(index)}
 					>
-						<Image
-							src={img}
+						<img
+							src={`https://kingdomly-creator-bucket.s3.us-east-2.amazonaws.com/cubhub-images/images-updated/${
+								index + 105
+							}.png`}
 							alt={`Thumbnail ${index + 1}`}
-							className="w-full h-full"
+							className="w-full h-full object-cover"
 							width={48}
 							height={48}
 						/>

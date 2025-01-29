@@ -1,18 +1,10 @@
 import AnimationsMenu from "@/components/AnimationMenu";
+import BringToVr from "@/components/bring-to-vr";
 import Header from "@/components/Header";
 import PawCounter from "@/components/pawcomponent";
 import ProfileMenu from "@/components/ProfileMenu";
 import RightMid from "@/components/RightMid";
 import Slider from "@/components/Slider";
-
-// SideRectangle Component
-const SideRectangle = ({ text }: { text: string }) => {
-	return (
-		<div className="w-36 h-10 flex justify-center items-center bg-black border border-cyan-400 rounded-lg cursor-pointer">
-			<p className="text-cyan-400 text-sm font-bold">{text}</p>
-		</div>
-	);
-};
 
 export default function Home() {
 	return (
@@ -36,7 +28,7 @@ export default function Home() {
 				</p>
 				<ProfileMenu />
 				<RightMid />
-				<SideRectangle text="BRING TO AR" />
+				<BringToVr />
 			</div>
 		</div>
 	);

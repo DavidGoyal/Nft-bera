@@ -3,19 +3,30 @@
 import { OrbitControls, Preload, useGLTF } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { Suspense, useEffect, useState } from "react";
-const models = [
-	"/panda1.glb",
-	"/panda2.glb",
-	"/panda3.glb",
-	"/panda4.glb",
-	"/panda5.glb",
-];
 
 const NFT = ({ index }: { index: number }) => {
 	// Use `useGLTF`, which supports DRACO automatically
-	const { scene } = useGLTF(models[index] ?? "/panda1.glb", true);
+	const models = [
+		`https://kingdomly-creator-bucket.s3.us-east-2.amazonaws.com/cubhub-glbs/glb-updated/glb/${
+			0 + 105
+		}.glb`,
+		`https://kingdomly-creator-bucket.s3.us-east-2.amazonaws.com/cubhub-glbs/glb-updated/glb/${
+			1 + 105
+		}.glb`,
+		`https://kingdomly-creator-bucket.s3.us-east-2.amazonaws.com/cubhub-glbs/glb-updated/glb/${
+			2 + 105
+		}.glb`,
+		`https://kingdomly-creator-bucket.s3.us-east-2.amazonaws.com/cubhub-glbs/glb-updated/glb/${
+			3 + 105
+		}.glb`,
+		`https://kingdomly-creator-bucket.s3.us-east-2.amazonaws.com/cubhub-glbs/glb-updated/glb/${
+			4 + 105
+		}.glb`,
+	];
+	const { scene } = useGLTF(models[index], true);
 
 	const [isMobile, setIsMobile] = useState(false);
+	models.forEach((model) => useGLTF.preload(model));
 
 	useEffect(() => {
 		const mediaQuery = window.matchMedia("(max-width: 500px)");
@@ -63,6 +74,4 @@ const NFT = ({ index }: { index: number }) => {
 };
 
 // Preload all GLTF models to optimize loading
-models.forEach((model) => useGLTF.preload(model));
-
 export default NFT;
