@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { Suspense, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import SideRectangle from "./sideRect";
 import dynamic from "next/dynamic";
 
@@ -26,6 +26,13 @@ const Slider = () => {
 		setCurrentIndex(index);
 		localStorage.setItem("currentIndex", (index + 105).toString());
 	};
+
+	useEffect(() => {
+	  if(currentIndex===0){
+		localStorage.setItem("currentIndex", "105");
+	  }
+	}, [currentIndex])
+	
 
 	return (
 		<div className="relative flex flex-col items-center h-screen w-full lg:justify-center">
