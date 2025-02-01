@@ -9,6 +9,10 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 
 const ThreeScene = ({ index }: { index: number }) => {
 	const containerRef = useRef<HTMLDivElement>(null);
+	const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
+	const sceneRef = useRef<THREE.Scene | null>(null);
+	const modelRef = useRef<THREE.Group | null>(null);
+	const frameIdRef = useRef<number | null>(null);
 	const [isMobile, setIsMobile] = useState(false);
 
 	useEffect(() => {
@@ -30,19 +34,30 @@ const ThreeScene = ({ index }: { index: number }) => {
 
 		// Scene setup
 		const scene = new THREE.Scene();
+		sceneRef.current = scene;
+
 		const camera = new THREE.PerspectiveCamera(
 			75,
 			window.innerWidth / window.innerHeight,
 			0.1,
 			1000
 		);
-		const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+		camera.position.set(0, 1, 5);
+
+		// Optimized renderer
+		const renderer = new THREE.WebGLRenderer({
+			antialias: isMobile ? false : true, // Disable antialiasing on mobile
+			alpha: true,
+			powerPreference: "high-performance",
+		});
 		renderer.setSize(window.innerWidth, window.innerHeight);
-		renderer.setPixelRatio(window.devicePixelRatio);
+		renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Limit pixel ratio
+		rendererRef.current = renderer;
 		currentRef.appendChild(renderer.domElement);
 
-		// Camera positioning (Initial position)
-		camera.position.set(0, 1, 5);
+		const hemiLight = new THREE.HemisphereLight(0xffffff, 0x000000, 5.5);
+		hemiLight.position.set(0, 20, 0);
+		scene.add(hemiLight);
 
 		// Lighting
 		const ambientLight = new THREE.AmbientLight(0xffffff, 1);
@@ -52,64 +67,113 @@ const ThreeScene = ({ index }: { index: number }) => {
 		directionalLight.position.set(5, 5, 5).normalize();
 		scene.add(directionalLight);
 
-		// Orbit Controls
+		// Orbit Controls - keeping original settings
 		const controls = new OrbitControls(camera, renderer.domElement);
 		controls.enableDamping = true;
 		controls.dampingFactor = 0.05;
 		controls.rotateSpeed = 1;
 		controls.zoomSpeed = 1.2;
-		controls.enablePan = false; // Disables dragging movement
-		controls.target.set(0, 0, 0); // Always look at the model's position
+		controls.enablePan = false;
+		controls.target.set(0, 0, 0);
 		controls.update();
 
-		// GLTF Model Loader
-		const loader = new GLTFLoader();
-		const dracoLoader = new DRACOLoader();
-		dracoLoader.setDecoderPath("https://www.gstatic.com/draco/v1/decoders/");
-		loader.setDRACOLoader(dracoLoader);
+		// Optimized model loading
+		const loadModel = async () => {
+			const loader = new GLTFLoader();
+			const dracoLoader = new DRACOLoader();
+			dracoLoader.setDecoderPath("https://www.gstatic.com/draco/v1/decoders/");
+			loader.setDRACOLoader(dracoLoader);
 
-		loader.load(
-			`https://kingdomly-creator-bucket.s3.us-east-2.amazonaws.com/cubhub-glbs/glb-updated/glb/${index}.glb`,
-			(gltf) => {
+			try {
+				const gltf = await loader.loadAsync(
+					`https://kingdomly-creator-bucket.s3.us-east-2.amazonaws.com/cubhub-glbs/glb-updated/glb/${index}.glb`
+				);
+
+				if (modelRef.current) {
+					scene.remove(modelRef.current);
+				}
+
 				const model = gltf.scene;
+				modelRef.current = model;
 
-				// Set model's position explicitly to prevent movement
+				// Keep original position and rotation
 				model.position.set(0, -2, 0);
-				model.rotation.set(0, 0, 0); // Reset rotation if needed
+				model.rotation.set(0, 0, 0);
 
-				// Scale based on device
 				const scaleFactor = isMobile ? 0.3 : 0.4;
 				model.scale.set(scaleFactor, scaleFactor, scaleFactor);
 
-				scene.add(model);
-			},
-			(xhr) =>
-				console.log(`Loading progress: ${(xhr.loaded / xhr.total) * 100}%`),
-			(error) => console.error("Error loading 3D model:", error)
-		);
+				// Optimize geometries and materials
+				model.traverse((child) => {
+					if ((child as THREE.Mesh).isMesh) {
+						const mesh = child as THREE.Mesh;
+						if (mesh.geometry) {
+							mesh.geometry.computeBoundingSphere();
+						}
+					}
+				});
 
-		// Animation loop
-		const renderScene = () => {
+				scene.add(model);
+			} catch (error) {
+				console.error("Error loading 3D model:", error);
+			}
+		};
+
+		loadModel();
+
+		// Optimized animation loop with frame limiting
+		let lastTime = 0;
+		const targetFPS = 60;
+		const frameInterval = 1000 / targetFPS;
+
+		const renderScene = (currentTime: number) => {
+			frameIdRef.current = requestAnimationFrame(renderScene);
+
+			const deltaTime = currentTime - lastTime;
+			if (deltaTime < frameInterval) return;
+
+			lastTime = currentTime - (deltaTime % frameInterval);
+
 			controls.update();
 			renderer.render(scene, camera);
-			requestAnimationFrame(renderScene);
 		};
-		renderScene();
 
-		// Resize handling
-		const handleResize = () => {
+		frameIdRef.current = requestAnimationFrame(renderScene);
+
+		// Debounced resize handler
+		const handleResize = debounce(() => {
 			const width = window.innerWidth;
 			const height = window.innerHeight;
 			camera.aspect = width / height;
 			camera.updateProjectionMatrix();
 			renderer.setSize(width, height);
-		};
+		}, 250);
+
 		window.addEventListener("resize", handleResize);
 
+		// Cleanup
 		return () => {
 			window.removeEventListener("resize", handleResize);
-			currentRef.removeChild(renderer.domElement);
+			if (frameIdRef.current) {
+				cancelAnimationFrame(frameIdRef.current);
+			}
+
+			if (modelRef.current) {
+				modelRef.current.traverse((child) => {
+					if ((child as THREE.Mesh).isMesh) {
+						const mesh = child as THREE.Mesh;
+						mesh.geometry.dispose();
+						if (Array.isArray(mesh.material)) {
+							mesh.material.forEach((material) => material.dispose());
+						} else {
+							mesh.material.dispose();
+						}
+					}
+				});
+			}
+
 			renderer.dispose();
+			currentRef.removeChild(renderer.domElement);
 		};
 	}, [index, isMobile]);
 
@@ -121,6 +185,19 @@ const ThreeScene = ({ index }: { index: number }) => {
 			<Header />
 		</div>
 	);
+};
+
+// Debounce utility function
+const debounce = (func: () => void, wait: number) => {
+	let timeout: NodeJS.Timeout;
+	return function executedFunction() {
+		const later = () => {
+			clearTimeout(timeout);
+			func();
+		};
+		clearTimeout(timeout);
+		timeout = setTimeout(later, wait);
+	};
 };
 
 export default ThreeScene;
