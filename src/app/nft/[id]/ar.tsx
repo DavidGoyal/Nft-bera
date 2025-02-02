@@ -6,6 +6,7 @@ import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+import { ARButton } from "three/examples/jsm/Addons.js";
 
 const ThreeScene = ({ index }: { index: number }) => {
 	const containerRef = useRef<HTMLDivElement>(null);
@@ -53,6 +54,7 @@ const ThreeScene = ({ index }: { index: number }) => {
 		renderer.setSize(window.innerWidth, window.innerHeight);
 		renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Limit pixel ratio
 		rendererRef.current = renderer;
+		renderer.xr.enabled = true;
 		currentRef.appendChild(renderer.domElement);
 
 		const hemiLight = new THREE.HemisphereLight(0xffffff, 0x000000, 5.5);
@@ -150,6 +152,7 @@ const ThreeScene = ({ index }: { index: number }) => {
 		}, 250);
 
 		window.addEventListener("resize", handleResize);
+		containerRef.current.appendChild(ARButton.createButton(renderer));
 
 		// Cleanup
 		return () => {
