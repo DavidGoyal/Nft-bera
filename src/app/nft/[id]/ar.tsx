@@ -153,6 +153,20 @@ const ThreeScene = ({ index }: { index: number }) => {
 		window.addEventListener("resize", handleResize);
 
 		renderer.xr.enabled = true;
+		renderer.xr.addEventListener("sessionstart", () => {
+			controls.enabled = true;
+			modelRef.current?.position.set(0, 0, 0);
+			modelRef.current?.scale.set(0.1, 0.1, 0.1);
+			modelRef.current?.rotation.set(0, 0, 0);
+			renderer.render(scene, camera);
+		});
+		renderer.xr.addEventListener("sessionend", () => {
+			controls.enabled = true;
+			modelRef.current?.position.set(0, -2, 0);
+			modelRef.current?.scale.set(0.3, 0.3, 0.3);
+			modelRef.current?.rotation.set(0, 0, 0);
+			renderer.render(scene, camera);
+		});
 
 		// Create AR button with proper session initialization
 		const arButton = ARButton.createButton(renderer, {
@@ -162,14 +176,6 @@ const ThreeScene = ({ index }: { index: number }) => {
 		currentRef.appendChild(arButton);
 
 		// Update animation loop for XR
-
-		if (renderer.xr.isPresenting) {
-			controls.enabled = true;
-			modelRef.current?.position.set(0, 0, 0);
-			modelRef.current?.scale.set(0.1, 0.1, 0.1);
-			modelRef.current?.rotation.set(0, 0, 0);
-			renderer.render(scene, camera);
-		}
 
 		// Cleanup
 		return () => {
