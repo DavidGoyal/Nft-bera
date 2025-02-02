@@ -98,10 +98,10 @@ const ThreeScene = ({ index }: { index: number }) => {
 				modelRef.current = model;
 
 				// Keep original position and rotation
-				model.position.set(0, 0, 0);
+				model.position.set(0, -2, 0);
 				model.rotation.set(0, 0, 0);
 
-				const scaleFactor = isMobile ? 0.1 : 0.4;
+				const scaleFactor = isMobile ? 0.3 : 0.4;
 				model.scale.set(scaleFactor, scaleFactor, scaleFactor);
 
 				// Optimize geometries and materials
@@ -162,12 +162,14 @@ const ThreeScene = ({ index }: { index: number }) => {
 		currentRef.appendChild(arButton);
 
 		// Update animation loop for XR
-		renderer.setAnimationLoop(() => {
-			if (renderer.xr.isPresenting) {
-				controls.enabled = false;
-				renderer.render(scene, camera);
-			}
-		});
+
+		if (renderer.xr.isPresenting) {
+			controls.enabled = true;
+			modelRef.current?.position.set(0, 0, 0);
+			modelRef.current?.scale.set(0.1, 0.1, 0.1);
+			modelRef.current?.rotation.set(0, 0, 0);
+			renderer.render(scene, camera);
+		}
 
 		// Cleanup
 		return () => {
