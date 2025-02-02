@@ -101,7 +101,7 @@ const ThreeScene = ({ index }: { index: number }) => {
 				model.position.set(0, 0, 0);
 				model.rotation.set(0, 0, 0);
 
-				const scaleFactor = isMobile ? 0.3 : 0.4;
+				const scaleFactor = isMobile ? 0.1 : 0.4;
 				model.scale.set(scaleFactor, scaleFactor, scaleFactor);
 
 				// Optimize geometries and materials
