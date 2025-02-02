@@ -54,7 +54,6 @@ const ThreeScene = ({ index }: { index: number }) => {
 		renderer.setSize(window.innerWidth, window.innerHeight);
 		renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Limit pixel ratio
 		rendererRef.current = renderer;
-		renderer.xr.enabled = true;
 		currentRef.appendChild(renderer.domElement);
 
 		const hemiLight = new THREE.HemisphereLight(0xffffff, 0x000000, 5.5);
@@ -99,7 +98,7 @@ const ThreeScene = ({ index }: { index: number }) => {
 				modelRef.current = model;
 
 				// Keep original position and rotation
-				model.position.set(0, -2, 0);
+				model.position.set(0, 0, 0);
 				model.rotation.set(0, 0, 0);
 
 				const scaleFactor = isMobile ? 0.3 : 0.4;
@@ -152,7 +151,23 @@ const ThreeScene = ({ index }: { index: number }) => {
 		}, 250);
 
 		window.addEventListener("resize", handleResize);
-		containerRef.current.appendChild(ARButton.createButton(renderer));
+
+		renderer.xr.enabled = true;
+
+		// Create AR button with proper session initialization
+		const arButton = ARButton.createButton(renderer, {
+			domOverlay: { root: currentRef },
+			requiredFeatures: ["hit-test", "dom-overlay"],
+		});
+		currentRef.appendChild(arButton);
+
+		// Update animation loop for XR
+		renderer.setAnimationLoop(() => {
+			if (renderer.xr.isPresenting) {
+				controls.enabled = false;
+				renderer.render(scene, camera);
+			}
+		});
 
 		// Cleanup
 		return () => {
