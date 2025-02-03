@@ -44,7 +44,7 @@ const ThreeScene = ({ index }: { index: number }) => {
 
 		// Styling and positioning
 		modelViewer.style.width = "100%";
-		modelViewer.style.height = "100%";
+		modelViewer.style.height = "90%";
 		modelViewer.style.touchAction = "none"; // Let model-viewer handle gestures
 		modelViewer.style.position = "absolute";
 		modelViewer.style.background = "transparent";
