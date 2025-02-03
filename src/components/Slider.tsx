@@ -43,7 +43,7 @@ const Slider = () => {
 					<SideRectangle text="BODY" />
 				</div>
 
-				<div className="col-span-12 lg:col-span-6 h-full relative flex flex-col items-center justify-end gap-8 lg:gap-12">
+				<div className="col-span-12 lg:col-span-6 h-full relative flex flex-col items-center justify-center lg:justify-end gap-8 lg:gap-12">
 					<div
 						className="hidden xl:block absolute w-[450px] h-[450px] rounded-full top-[35%] transform -translate-y-1/2"
 						style={{
