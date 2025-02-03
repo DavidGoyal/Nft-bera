@@ -28,8 +28,8 @@ const Model = memo(({ url, isMobile }: { url: string; isMobile: boolean }) => {
 	return (
 		<primitive
 			object={scene}
-			scale={isMobile ? 0.65 : 0.75}
-			position={[0, -4.2, 0]}
+			scale={isMobile ? 0.6 : 0.75}
+			position={[0, -4.0, 0]}
 			rotation={[-0.04, -5, 0.03]}
 		/>
 	);
@@ -82,7 +82,7 @@ const NFT = ({ index }: { index: number }) => {
 				powerPreference: "high-performance",
 			}}
 			performance={{ min: 0.5 }}
-			className="w-full h-full z-10"
+			className="w-full z-10 flex justify-center items-center"
 		>
 			<OrbitControls
 				enableZoom={false}

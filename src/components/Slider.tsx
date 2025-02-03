@@ -34,7 +34,7 @@ const Slider = () => {
 	}, [currentIndex]);
 
 	return (
-		<div className="relative flex flex-col items-center h-screen w-full lg:justify-center">
+		<div className="relative flex flex-col items-center h-screen max-h-[100vh] w-full lg:justify-center">
 			<div className="hidden lg:h-[8vh]"></div>
 			<div className="grid grid-cols-12 h-full lg:h-[70vh] w-full pt-14 lg:pt-0">
 				<div className="hidden lg:flex lg:col-span-3 h-full flex-col justify-end gap-4 items-end">
@@ -43,7 +43,7 @@ const Slider = () => {
 					<SideRectangle text="BODY" />
 				</div>
 
-				<div className="col-span-12 lg:col-span-6 h-full relative flex flex-col items-center justify-start lg:justify-end gap-12">
+				<div className="col-span-12 lg:col-span-6 h-full relative flex flex-col items-center justify-end gap-12">
 					<div
 						className="hidden xl:block absolute w-[450px] h-[450px] rounded-full top-[35%] transform -translate-y-1/2"
 						style={{

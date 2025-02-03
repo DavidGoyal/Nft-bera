@@ -22,7 +22,7 @@ body {
 
 model-viewer::part(default-ar-button) {
 	position: absolute;
-	top: 60px;
+	top: 50px;
 	right: 40px; /* Adjust as needed */
 	width: 50px;
 	height: 50px;
@@ -31,5 +31,5 @@ model-viewer::part(default-ar-button) {
 	justify-content: center;
 	visibility: visible !important;
 	opacity: 1 !important;
-	z-index: 5000 !important;
+	z-index: 2000000 !important;
 }
