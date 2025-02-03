@@ -41,13 +41,9 @@ const ThreeScene = ({ index }: { index: number }) => {
 		modelViewer.setAttribute("allow", "xr-spatial-tracking");
 
 		// Styling and positioning
-		modelViewer.style.width = "100vw";
+		modelViewer.style.width = "100%";
 		modelViewer.style.height = "100vh";
 		modelViewer.style.background = "transparent";
-		modelViewer.style.flex = "1";
-		modelViewer.style.flexDirection = "column";
-		modelViewer.style.alignItems = "center";
-		modelViewer.style.justifyContent = "center";
 
 		// Save reference and append to DOM
 		modelViewerRef.current = modelViewer;
