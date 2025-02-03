@@ -28,11 +28,10 @@ const Slider = () => {
 	};
 
 	useEffect(() => {
-	  if(currentIndex===0){
-		localStorage.setItem("currentIndex", "105");
-	  }
-	}, [currentIndex])
-	
+		if (currentIndex === 0) {
+			localStorage.setItem("currentIndex", "105");
+		}
+	}, [currentIndex]);
 
 	return (
 		<div className="relative flex flex-col items-center h-screen w-full lg:justify-center">
@@ -44,7 +43,7 @@ const Slider = () => {
 					<SideRectangle text="BODY" />
 				</div>
 
-				<div className="col-span-12 lg:col-span-6 h-full relative flex flex-col items-center justify-end gap-12">
+				<div className="col-span-12 lg:col-span-6 h-full relative flex flex-col items-center justify-start lg:justify-end gap-12">
 					<div
 						className="hidden xl:block absolute w-[450px] h-[450px] rounded-full top-[35%] transform -translate-y-1/2"
 						style={{
