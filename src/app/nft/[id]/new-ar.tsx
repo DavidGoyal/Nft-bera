@@ -50,6 +50,8 @@ const ThreeScene = ({ index }: { index: number }) => {
 		// Styling and positioning
 		modelViewer.style.width = "100%";
 		modelViewer.style.height = "100%";
+		modelViewer.style.touchAction = "none"; // Let model-viewer handle gestures
+		modelViewer.style.position = "absolute";
 		modelViewer.style.background = "transparent";
 
 		// Save reference and append to DOM
@@ -68,6 +70,7 @@ const ThreeScene = ({ index }: { index: number }) => {
 		<div
 			className="h-screen w-screen max-h-[100vh] overflow-y-hidden bg-gradient-to-b from-black via-[#010044] to-black relative"
 			ref={containerRef}
+			style={{ touchAction: "none" }}
 		>
 			<Header />
 		</div>
