@@ -64,7 +64,7 @@ const ThreeScene = ({ index }: { index: number }) => {
 
 	return (
 		<div
-			className="min-h-screen w-screen bg-gradient-to-b from-black via-[#010044] to-black relative"
+			className="h-screen w-screen bg-gradient-to-b from-black via-[#010044] to-black relative"
 			ref={containerRef}
 		>
 			<Header />
