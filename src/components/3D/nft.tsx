@@ -28,7 +28,7 @@ const Model = memo(({ url, isMobile }: { url: string; isMobile: boolean }) => {
 	return (
 		<primitive
 			object={scene}
-			scale={isMobile ? 0.72 : 0.75}
+			scale={isMobile ? 0.65 : 0.75}
 			position={[0, -4.2, 0]}
 			rotation={[-0.04, -5, 0.03]}
 		/>
