@@ -28,6 +28,7 @@ const ThreeScene = ({ index }: { index: number }) => {
 		modelViewer.setAttribute("ar", "");
 		modelViewer.setAttribute("ar-modes", "webxr scene-viewer quick-look");
 		modelViewer.setAttribute("ar-scale", "auto");
+		modelViewer.setAttribute("ar-placement", "floor");
 		modelViewer.setAttribute("poster", ""); // Add a poster image while loading
 
 		modelViewer.setAttribute("disable-zoom", "false"); // Allow zooming
