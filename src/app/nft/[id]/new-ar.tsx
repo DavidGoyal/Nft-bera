@@ -25,11 +25,16 @@ const ThreeScene = ({ index }: { index: number }) => {
 		);
 		modelViewer.setAttribute("alt", "3D Model");
 		modelViewer.setAttribute("camera-controls", "");
-		modelViewer.setAttribute("auto-rotate", "");
 		modelViewer.setAttribute("shadow-intensity", "1");
-		modelViewer.setAttribute("ar", "true");
+		modelViewer.setAttribute("ar", "");
 		modelViewer.setAttribute("ar-modes", "webxr scene-viewer quick-look");
 		modelViewer.setAttribute("scale", "2 2 2"); // Increase size
+		modelViewer.setAttribute("environment-image", "neutral");
+		modelViewer.setAttribute("interaction-policy", "allow-when-focused");
+		modelViewer.setAttribute("interaction-prompt", "when-focused");
+		modelViewer.setAttribute("interaction-prompt-threshold", "medium");
+		modelViewer.setAttribute("loading", "eager");
+		modelViewer.setAttribute("shadow-softness", "1");
 
 		// Styling and positioning
 		modelViewer.style.width = "100vw";
