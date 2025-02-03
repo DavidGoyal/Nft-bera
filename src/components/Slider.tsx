@@ -9,6 +9,7 @@ const NFT = dynamic(() => import("./3D/nft"), { ssr: false });
 
 const Slider = () => {
 	const [currentIndex, setCurrentIndex] = useState<number>(0);
+	const [customize, setCustomize] = useState<boolean>(false);
 
 	const handlePrev = () => {
 		const index = (currentIndex - 1 + 5) % 5;
@@ -34,7 +35,7 @@ const Slider = () => {
 	}, [currentIndex]);
 
 	return (
-		<div className="relative flex flex-col overflow-y-hidden items-center h-[100vh] max-h-[100vh] w-full lg:justify-center">
+		<div className="relative flex flex-col items-center h-[100vh] max-h-[100vh] w-full lg:justify-center">
 			<div className="hidden lg:h-[8vh]"></div>
 			<div className="grid grid-cols-12 h-full lg:h-[70vh] w-full pt-14 lg:pt-0">
 				<div className="hidden lg:flex lg:col-span-3 h-full flex-col justify-end gap-4 items-end">
@@ -87,10 +88,28 @@ const Slider = () => {
 						/>
 					</button>
 					<div className="flex flex-wrap lg:hidden w-full justify-center items-center gap-6">
-						<SideRectangle text="SHOES" w={"40%"} p={"1.5rem"} />
-						<SideRectangle text="ACCESSORIES" w={"40%"} p={"1.5rem"} />
-						<SideRectangle text="BACKGROUND" w={"40%"} p={"1.5rem"} />
-						<SideRectangle text="SHOES" w={"40%"} p={"1.5rem"} />
+						{!customize ? (
+							<button
+								className={`bg-black border-2 border-cyan-400 rounded-md lg:rounded-xl flex items-center justify-center text-cyan-400 font-bold text-md`}
+								style={{
+									width: "40%",
+									paddingLeft: "1.5rem",
+									paddingRight: "1.5rem",
+									paddingTop: "0.5rem",
+									paddingBottom: "0.5rem",
+								}}
+								onClick={() => setCustomize(true)}
+							>
+								Customize
+							</button>
+						) : (
+							<>
+								<SideRectangle text="SHOES" w={"40%"} p={"1.5rem"} />
+								<SideRectangle text="ACCESSORIES" w={"40%"} p={"1.5rem"} />
+								<SideRectangle text="BACKGROUND" w={"40%"} p={"1.5rem"} />
+								<SideRectangle text="SHOES" w={"40%"} p={"1.5rem"} />
+							</>
+						)}
 					</div>
 
 					<div className="flex lg:hidden w-full justify-center items-center gap-10">
