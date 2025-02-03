@@ -1,12 +1,38 @@
 "use client";
 
 import Header from "./components/Header";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import "@google/model-viewer";
+import QRCode from "react-qr-code";
 
-const ThreeScene = ({ index }: { index: number }) => {
+const ThreeScene = ({ index, value }: { index: number; value: string }) => {
 	const containerRef = useRef<HTMLDivElement>(null);
 	const modelViewerRef = useRef<HTMLElement | null>(null);
+	const [isQRVisible, setIsQRVisible] = useState(true);
+	const [isMobile, setIsMobile] = useState(false);
+
+	useEffect(() => {
+		const checkARSupport = async () => {
+			if (!window.navigator.xr) {
+				setIsMobile(true);
+				return;
+			}
+
+			try {
+				const supported = await window.navigator.xr.isSessionSupported(
+					"immersive-ar"
+				);
+				if (!supported) {
+					setIsMobile(true);
+				}
+			} catch (error) {
+				console.error("Error checking AR support:", error);
+				setIsMobile(true);
+			}
+		};
+
+		checkARSupport();
+	}, []);
 
 	useEffect(() => {
 		if (!containerRef.current) return;
@@ -67,6 +93,14 @@ const ThreeScene = ({ index }: { index: number }) => {
 			ref={containerRef}
 			style={{ touchAction: "none" }}
 		>
+			{isMobile && isQRVisible && (
+				<div
+					className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 h-screen w-screen bg-black bg-opacity-80 flex flex-col items-center justify-center"
+					onClick={() => setIsQRVisible(false)}
+				>
+					<QRCode value={value} />
+				</div>
+			)}
 			<Header />
 		</div>
 	);
