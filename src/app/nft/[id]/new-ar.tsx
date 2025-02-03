@@ -24,7 +24,7 @@ const ThreeScene = ({ index }: { index: number }) => {
 			`https://kingdomly-creator-bucket.s3.us-east-2.amazonaws.com/cubhub-glbs/glb-updated/glb/${index}.glb`
 		);
 		modelViewer.setAttribute("alt", "3D Model");
-		modelViewer.setAttribute("camera-controls", "");
+		modelViewer.setAttribute("camera-controls", "true");
 		modelViewer.setAttribute("ar", "");
 		modelViewer.setAttribute("ar-modes", "webxr scene-viewer quick-look");
 		modelViewer.setAttribute("ar-scale", "auto");
@@ -33,9 +33,6 @@ const ThreeScene = ({ index }: { index: number }) => {
 
 		modelViewer.setAttribute("disable-zoom", "false"); // Allow zooming
 		modelViewer.setAttribute("gesture-detector", ""); // Enable gestures
-		modelViewer.setAttribute("touch-action", "pan-y"); // Allow panning
-		modelViewer.setAttribute("touch-action", "pan-x"); // Allow panning
-		modelViewer.setAttribute("touch-action", "pan-z"); // Allow panning
 		modelViewer.setAttribute("interaction-prompt", "auto"); // Show interaction hint
 
 		// Additional attributes for better experience
