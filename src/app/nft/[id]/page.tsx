@@ -1,5 +1,5 @@
 import React from "react";
-import ThreeScene from "./ar";
+import ThreeScene from "./new-ar";
 
 export default async function Page({
 	params,
