@@ -26,20 +26,25 @@ const ThreeScene = ({ index }: { index: number }) => {
 		modelViewer.setAttribute("alt", "3D Model");
 		modelViewer.setAttribute("camera-controls", "");
 		modelViewer.setAttribute("shadow-intensity", "1");
-		modelViewer.setAttribute("ar", "");
+		modelViewer.setAttribute("ar", "true");
 		modelViewer.setAttribute("ar-modes", "webxr scene-viewer quick-look");
-		modelViewer.setAttribute("scale", "2 2 2"); // Increase size
+		modelViewer.setAttribute("scale", "1 1 1"); // Increase size
 		modelViewer.setAttribute("environment-image", "neutral");
 		modelViewer.setAttribute("interaction-policy", "allow-when-focused");
 		modelViewer.setAttribute("interaction-prompt", "when-focused");
 		modelViewer.setAttribute("interaction-prompt-threshold", "medium");
 		modelViewer.setAttribute("loading", "eager");
 		modelViewer.setAttribute("shadow-softness", "1");
+		modelViewer.setAttribute("allow", "xr-spatial-tracking");
+		modelViewer.setAttribute("disable-tap", "false");
 
 		// Styling and positioning
 		modelViewer.style.width = "100vw";
 		modelViewer.style.height = "100vh";
 		modelViewer.style.background = "transparent";
+		modelViewer.style.flex = "1";
+		modelViewer.style.alignItems = "center";
+		modelViewer.style.justifyContent = "center";
 
 		// Save reference and append to DOM
 		modelViewerRef.current = modelViewer;
@@ -55,7 +60,7 @@ const ThreeScene = ({ index }: { index: number }) => {
 
 	return (
 		<div
-			className="min-h-screen overflow-x-hidden w-screen bg-gradient-to-b from-black via-[#010044] to-black grid grid-cols-12 relative"
+			className="h-screen overflow-x-hidden w-screen bg-gradient-to-b from-black via-[#010044] to-black relative"
 			ref={containerRef}
 		>
 			<Header />
