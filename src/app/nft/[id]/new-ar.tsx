@@ -39,7 +39,7 @@ const ThreeScene = ({ index, value }: { index: number; value: string }) => {
 		const currentRef = containerRef.current;
 
 		// Remove previous model-viewer if exists
-		if (modelViewerRef.current) {
+		if (modelViewerRef.current && currentRef.contains(modelViewerRef.current)) {
 			currentRef.removeChild(modelViewerRef.current);
 		}
 
@@ -95,7 +95,7 @@ const ThreeScene = ({ index, value }: { index: number; value: string }) => {
 		>
 			{isMobile && isQRVisible && (
 				<div
-					className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 h-screen w-screen bg-black bg-opacity-80 flex flex-col items-center justify-center"
+					className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-[100] h-screen w-screen bg-white bg-opacity-50 flex flex-col items-center justify-center"
 					onClick={() => setIsQRVisible(false)}
 				>
 					<QRCode value={value} />
