@@ -47,7 +47,7 @@ const ThreeScene = ({ index }: { index: number }) => {
 
 		// Styling and positioning
 		modelViewer.style.width = "100%";
-		modelViewer.style.height = "100vh";
+		modelViewer.style.height = "90vh";
 		modelViewer.style.background = "transparent";
 
 		// Save reference and append to DOM
@@ -64,7 +64,7 @@ const ThreeScene = ({ index }: { index: number }) => {
 
 	return (
 		<div
-			className="h-screen w-screen max-h-[100vh] bg-gradient-to-b from-black via-[#010044] to-black relative"
+			className="h-screen w-screen max-h-[100vh] overflow-y-hidden bg-gradient-to-b from-black via-[#010044] to-black relative"
 			ref={containerRef}
 		>
 			<Header />
