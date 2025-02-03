@@ -34,6 +34,8 @@ const ThreeScene = ({ index }: { index: number }) => {
 		modelViewer.setAttribute("disable-zoom", "false"); // Allow zooming
 		modelViewer.setAttribute("gesture-detector", ""); // Enable gestures
 		modelViewer.setAttribute("touch-action", "pan-y"); // Allow panning
+		modelViewer.setAttribute("touch-action", "pan-x"); // Allow panning
+		modelViewer.setAttribute("touch-action", "pan-z"); // Allow panning
 		modelViewer.setAttribute("interaction-prompt", "auto"); // Show interaction hint
 
 		// Additional attributes for better experience
@@ -47,7 +49,7 @@ const ThreeScene = ({ index }: { index: number }) => {
 
 		// Styling and positioning
 		modelViewer.style.width = "100%";
-		modelViewer.style.height = "90vh";
+		modelViewer.style.height = "100%";
 		modelViewer.style.background = "transparent";
 
 		// Save reference and append to DOM
