@@ -45,6 +45,7 @@ const ThreeScene = ({ index }: { index: number }) => {
 		modelViewer.style.height = "100vh";
 		modelViewer.style.background = "transparent";
 		modelViewer.style.flex = "1";
+		modelViewer.style.flexDirection = "column";
 		modelViewer.style.alignItems = "center";
 		modelViewer.style.justifyContent = "center";
 
