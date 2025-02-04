@@ -82,7 +82,7 @@ const NFT = ({ index }: { index: number }) => {
 				powerPreference: "high-performance",
 			}}
 			performance={{ min: 0.5 }}
-			className="w-full z-10 flex justify-center items-center !h-[50%] lg:!h-full"
+			className="w-full z-10 flex justify-center items-center !h-full"
 		>
 			<OrbitControls
 				enableZoom={false}
