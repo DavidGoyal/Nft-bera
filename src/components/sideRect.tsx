@@ -10,7 +10,7 @@ const SideRectangle = ({
 	p?: string;
 }) => {
 	return (
-		<div
+		<button
 			className={`bg-black border-2 border-cyan-400 rounded-md lg:rounded-xl flex items-center justify-center`}
 			style={{
 				width: w ?? "70%",
@@ -21,7 +21,7 @@ const SideRectangle = ({
 			}}
 		>
 			<p className="text-cyan-400 font-bold text-md">{text}</p>
-		</div>
+		</button>
 	);
 };
 

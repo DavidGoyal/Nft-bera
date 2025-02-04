@@ -35,16 +35,34 @@ const Slider = () => {
 	}, [currentIndex]);
 
 	return (
-		<div className="relative flex flex-col items-center h-[100vh] max-h-[100vh] w-full lg:justify-center">
-			<div className="hidden lg:h-[8vh]"></div>
-			<div className="grid grid-cols-12 h-full lg:h-[70vh] w-full pt-14 lg:pt-0">
+		<div className="relative flex flex-col items-center h-full w-full lg:justify-center">
+			<div className="hidden lg:h-[8%]"></div>
+			<div className="grid grid-cols-12 h-full lg:h-[70%] w-full pt-14 lg:pt-0">
 				<div className="hidden lg:flex lg:col-span-3 h-full flex-col justify-end gap-4 items-end">
-					<SideRectangle text="HEAD" />
-					<SideRectangle text="FACE" />
-					<SideRectangle text="BODY" />
+					{!customize ? (
+						<button
+							className={`bg-black border-2 border-cyan-400 rounded-md lg:rounded-xl flex items-center justify-center text-cyan-400 font-bold text-md`}
+							style={{
+								width: "70%",
+								paddingLeft: "1.5rem",
+								paddingRight: "1.5rem",
+								paddingTop: "0.5rem",
+								paddingBottom: "0.5rem",
+							}}
+							onClick={() => setCustomize(true)}
+						>
+							Customize
+						</button>
+					) : (
+						<>
+							<SideRectangle text="HEAD" />
+							<SideRectangle text="FACE" />
+							<SideRectangle text="BODY" />
+						</>
+					)}
 				</div>
 
-				<div className="col-span-12 lg:col-span-6 h-full relative flex flex-col items-center justify-end gap-8 lg:gap-12">
+				<div className="col-span-12 lg:col-span-6 h-full relative flex flex-col items-center justify-between lg:justify-end gap-8 lg:gap-12">
 					<div
 						className="hidden xl:block absolute w-[450px] h-[450px] rounded-full top-[35%] transform -translate-y-1/2"
 						style={{
@@ -67,7 +85,7 @@ const Slider = () => {
 					</button>
 					<Suspense
 						fallback={
-							<div className="!h-[48vh] w-full text-white flex items-center justify-center">
+							<div className="!h-[48%] w-full text-white flex items-center justify-center">
 								<div className="animate-spin rounded-full h-8 w-8 border-t-4 border-b-4 border-blue-500"></div>
 							</div>
 						}
@@ -128,13 +146,17 @@ const Slider = () => {
 				</div>
 
 				<div className="hidden lg:flex lg:col-span-3 h-full flex-col items-start justify-end gap-4">
-					<SideRectangle text="SHOES" />
-					<SideRectangle text="ACCESSORIES" />
-					<SideRectangle text="BACKGROUND" />
+					{customize && (
+						<>
+							<SideRectangle text="SHOES" />
+							<SideRectangle text="ACCESSORIES" />
+							<SideRectangle text="BACKGROUND" />
+						</>
+					)}
 				</div>
 			</div>
 
-			<div className="hidden lg:flex justify-center items-end gap-12 w-full h-[10vh] mt-10">
+			<div className="hidden lg:flex justify-center items-end gap-12 w-full h-[10%] mt-10">
 				{Array.from({ length: 5 }).map((_, index) => (
 					<button
 						key={index}
