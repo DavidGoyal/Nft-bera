@@ -8,7 +8,7 @@ import Slider from "@/components/Slider";
 
 export default function Home() {
 	return (
-		<div className="h-screen overflow-x-hidden overflow-y-hidden max-h-[100vh] w-screen bg-gradient-to-b from-black via-[#010044] to-black grid grid-cols-12 relative">
+		<div className="!h-screen overflow-x-hidden !overflow-y-hidden !max-h-[100vh] w-screen bg-gradient-to-b from-black via-[#010044] to-black grid grid-cols-12 relative">
 			<Header />
 			<div className="hidden xl:flex xl:col-span-2 h-full flex-col items-start justify-end p-8 gap-14">
 				<PawCounter />
