@@ -12,26 +12,16 @@ const ThreeScene = ({ index, value }: { index: number; value: string }) => {
 	const [isMobile, setIsMobile] = useState(false);
 
 	useEffect(() => {
-		const checkARSupport = async () => {
-			if (!window.navigator.xr) {
-				setIsMobile(true);
-				return;
-			}
+		const mediaQuery = window.matchMedia("(min-width: 500px)");
+		setIsMobile(mediaQuery.matches);
 
-			try {
-				const supported = await window.navigator.xr.isSessionSupported(
-					"immersive-ar"
-				);
-				if (!supported) {
-					setIsMobile(true);
-				}
-			} catch (error) {
-				console.error("Error checking AR support:", error);
-				setIsMobile(true);
-			}
+		const handleMediaQueryChange = (event: MediaQueryListEvent) => {
+			setIsMobile(event.matches);
 		};
 
-		checkARSupport();
+		mediaQuery.addEventListener("change", handleMediaQueryChange);
+		return () =>
+			mediaQuery.removeEventListener("change", handleMediaQueryChange);
 	}, []);
 
 	useEffect(() => {
