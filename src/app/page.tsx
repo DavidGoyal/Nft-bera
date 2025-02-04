@@ -15,7 +15,7 @@ export default function Home() {
 				<AnimationsMenu />
 			</div>
 
-			<div className="col-span-12 xl:col-span-8 h-full overflow-y-hidden flex flex-col p-8">
+			<div className="col-span-12 xl:col-span-8 h-full flex flex-col p-8">
 				<Slider />
 			</div>
 

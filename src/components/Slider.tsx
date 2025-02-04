@@ -35,7 +35,7 @@ const Slider = () => {
 	}, [currentIndex]);
 
 	return (
-		<div className="relative flex flex-col items-center h-full overflow-y-hidden w-full lg:justify-center">
+		<div className="relative flex flex-col items-center h-full w-full lg:justify-center">
 			<div className="hidden lg:h-[8%]"></div>
 			<div className="grid grid-cols-12 h-full lg:h-[70%] w-full pt-14 lg:pt-0">
 				<div className="hidden lg:flex lg:col-span-3 h-full flex-col justify-end gap-4 items-end">
