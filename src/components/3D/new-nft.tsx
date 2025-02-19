@@ -29,7 +29,6 @@ const ThreeScene = ({ index }: { index: number }) => {
     modelViewer.setAttribute("camera-controls", "true");
     modelViewer.setAttribute("ar", "");
     modelViewer.setAttribute("ar-modes", "webxr scene-viewer quick-look");
-    modelViewer.setAttribute("ar-scale", "auto");
 
     modelViewer.setAttribute("disable-zoom", "false"); // Allow zooming
     modelViewer.setAttribute("gesture-detector", ""); // Enable gestures
@@ -43,7 +42,6 @@ const ThreeScene = ({ index }: { index: number }) => {
     modelViewer.setAttribute("exposure", "1");
     modelViewer.setAttribute("loading", "eager");
     modelViewer.setAttribute("allow", "xr-spatial-tracking");
-    modelViewer.setAttribute("ar-button", "#bring-to-ar");
 
     // Styling and positioning
     modelViewer.style.width = "100%";
