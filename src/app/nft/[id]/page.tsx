@@ -1,15 +1,18 @@
 import React from "react";
 import ThreeScene from "./new-ar";
 import { headers } from "next/headers";
+import { notFound } from "next/navigation";
 
 export default async function Page({
-	params,
+  params,
 }: {
-	params: Promise<{ id: string }>;
+  params: Promise<{ id: string }>;
 }) {
-	const id = (await params).id;
-	const headersList = headers();
-	const value = (await headersList).get("x-forwarded-host");
+  const id = (await params).id;
+  const headersList = headers();
+  const value = (await headersList).get("x-forwarded-host");
 
-	return <ThreeScene index={Number(id)} value={`https://${value}/nft/${id}`} />;
+  return notFound();
+
+  return <ThreeScene index={Number(id)} value={`https://${value}/nft/${id}`} />;
 }

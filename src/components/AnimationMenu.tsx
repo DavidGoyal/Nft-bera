@@ -1,17 +1,32 @@
 "use client";
 import React, { useState } from "react";
+import SideRectangle from "./sideRect";
 
 const AnimationsMenu = () => {
-	const [selected, setSelected] = useState<string | null>(null);
+  const [selected, setSelected] = useState<string | null>(null);
 
-	const handleClick = (text: string) => {
-		setSelected(text);
-	};
+  const handleClick = (text: string) => {
+    setSelected(text);
+  };
 
-	return (
-		<div className="flex flex-col items-center w-36 bg-black rounded-2xl border border-cyan-500">
-			{/* Animation Options */}
-			{["IDLE", "WALK", "RUN", "FLIP", "DANCE", "ANIMATIONS"].map(
+  const [clicked, setClicked] = useState<boolean>(false);
+
+  return !clicked ? (
+    <button
+      className="bg-black rounded-md xl:rounded-xl flex items-center border-2 border-cyan-400 justify-center text-cyan-400 font-bold text-md px-6 py-2"
+      onClick={() => setClicked(true)}
+    >
+      Customize
+    </button>
+  ) : (
+    <SideRectangle text="COMING SOON" />
+  );
+  // <div className="flex flex-col items-center w-36 bg-black rounded-2xl border border-cyan-500">
+  {
+    /* Animation Options */
+  }
+  {
+    /* {["IDLE", "WALK", "RUN", "FLIP", "DANCE", "ANIMATIONS"].map(
 				(text, index) => (
 					<button
 						key={index}
@@ -25,9 +40,10 @@ const AnimationsMenu = () => {
 						{text}
 					</button>
 				)
-			)}
-		</div>
-	);
+			)} */
+  }
+  // </div>
+  //   );
 };
 
 export default AnimationsMenu;
