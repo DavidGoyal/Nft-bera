@@ -94,7 +94,7 @@ const Slider = () => {
               height={48}
             />
           </button>
-          <div className="w-full z-10 flex justify-center items-center !h-[50%] xl:!h-full">
+          <div className="w-full z-10 flex justify-center items-center !h-[35vh] xl:!h-full">
             <Suspense
               fallback={
                 <div className="!h-[100%] w-full text-white flex items-center justify-center" />

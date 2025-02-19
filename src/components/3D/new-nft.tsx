@@ -33,19 +33,19 @@ const ThreeScene = ({ index }: { index: number }) => {
     modelViewer.setAttribute("interaction-prompt", "auto"); // Show interaction hint
 
     // Additional attributes for better experience
-    modelViewer.setAttribute("scale", "0.6 0.6 0.6");
+    modelViewer.setAttribute("scale", "1 1 1");
     modelViewer.setAttribute("environment-image", "neutral");
     modelViewer.setAttribute("shadow-intensity", "1");
     modelViewer.setAttribute("shadow-softness", "1");
     modelViewer.setAttribute("exposure", "1");
     modelViewer.setAttribute("loading", "eager");
     modelViewer.setAttribute("allow", "xr-spatial-tracking");
+    modelViewer.setAttribute("ar-button", "#bring-to-ar");
 
     // Styling and positioning
     modelViewer.style.width = "100%";
     modelViewer.style.height = "100%";
     modelViewer.style.touchAction = "none"; // Let model-viewer handle gestures
-    modelViewer.style.position = "absolute";
     modelViewer.style.background = "transparent";
 
     // Save reference and append to DOM
