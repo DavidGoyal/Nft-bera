@@ -3,11 +3,11 @@ import React, { useState } from "react";
 import SideRectangle from "./sideRect";
 
 const AnimationsMenu = () => {
-  const [selected, setSelected] = useState<string | null>(null);
+  // const [selected, setSelected] = useState<string | null>(null);
 
-  const handleClick = (text: string) => {
-    setSelected(text);
-  };
+  // const handleClick = (text: string) => {
+  //   setSelected(text);
+  // };
 
   const [clicked, setClicked] = useState<boolean>(false);
 
