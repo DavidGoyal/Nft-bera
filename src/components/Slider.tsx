@@ -4,7 +4,9 @@ import Image from "next/image";
 import { Suspense, useEffect, useState } from "react";
 import SideRectangle from "./sideRect";
 import BringToVr from "./bring-to-vr";
-import ThreeScene from "./3D/new-nft";
+import dynamic from "next/dynamic";
+
+const NFT = dynamic(() => import("./3D/new-nft"), { ssr: false });
 
 const Slider = () => {
   const [currentIndex, setCurrentIndex] = useState<number>(51);
@@ -98,7 +100,7 @@ const Slider = () => {
                 <div className="!h-[100%] w-full text-white flex items-center justify-center" />
               }
             >
-              <ThreeScene index={currentIndex} />
+              <NFT index={currentIndex} />
             </Suspense>
           </div>
           <button
