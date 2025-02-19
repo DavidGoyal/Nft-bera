@@ -29,6 +29,7 @@ const ThreeScene = ({ index }: { index: number }) => {
     modelViewer.setAttribute("camera-controls", "true");
     modelViewer.setAttribute("ar", "");
     modelViewer.setAttribute("ar-modes", "webxr scene-viewer quick-look");
+    modelViewer.setAttribute("ar-scale", "auto");
 
     modelViewer.setAttribute("disable-zoom", "false"); // Allow zooming
     modelViewer.setAttribute("gesture-detector", ""); // Enable gestures
