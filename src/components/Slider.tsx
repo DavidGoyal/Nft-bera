@@ -53,6 +53,14 @@ const Slider = () => {
   };
 
   useEffect(() => {
+    if (customize) {
+      setTimeout(() => {
+        setCustomize(false);
+      }, 3000);
+    }
+  }, [customize]);
+
+  useEffect(() => {
     if (currentIndex === 1) {
       localStorage.setItem("currentIndex", "1");
     }
@@ -124,8 +132,8 @@ const Slider = () => {
             <div className="flex gap-2 items-center justify-center">
               <input
                 type="text"
-                className="border-2 w-[40%] border-cyan-400 rounded-md xl:rounded-xl flex items-center justify-center text-cyan-400 font-bold text-md p-2 bg-transparent placeholder:text-cyan-400 placeholder:font-bold placeholder:text-md"
-                placeholder="Enter NFT Id"
+                className="border-2 w-[40%] border-cyan-400 rounded-md xl:rounded-xl flex items-center justify-center text-cyan-400 font-bold text-md text-center p-2 bg-transparent placeholder:text-cyan-400 placeholder:font-bold placeholder:text-md placeholder:text-center"
+                placeholder="Enter ID"
                 value={nftId}
                 onChange={(e) => setNftId(e.target.value)}
               />
@@ -172,8 +180,8 @@ const Slider = () => {
             <div className="w-full flex gap-2 items-center justify-center">
               <input
                 type="text"
-                className="w-full border-2 border-cyan-400 rounded-md xl:rounded-xl flex items-center justify-center text-cyan-400 font-bold text-md p-2 bg-transparent placeholder:text-cyan-400 placeholder:font-bold placeholder:text-md"
-                placeholder="Enter NFT Id"
+                className="w-full border-2 border-cyan-400 rounded-md xl:rounded-xl flex items-center justify-center text-cyan-400 text-center font-bold text-md p-2 bg-transparent placeholder:text-cyan-400 placeholder:font-bold placeholder:text-md placeholder:text-center"
+                placeholder="Enter NFT ID"
                 value={nftId}
                 onChange={(e) => setNftId(e.target.value)}
               />

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import SideRectangle from "./sideRect";
 
 const AnimationsMenu = () => {
@@ -10,6 +10,14 @@ const AnimationsMenu = () => {
   // };
 
   const [clicked, setClicked] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (clicked) {
+      setTimeout(() => {
+        setClicked(false);
+      }, 3000);
+    }
+  }, [clicked]);
 
   return !clicked ? (
     <button
