@@ -10,7 +10,7 @@ export default function BringToVr({ w, p }: { w?: string; p?: string }) {
   //   };
   return (
     <button
-      className={`bg-black border-2 border-cyan-400 rounded-md xl:rounded-xl flex items-center justify-center text-cyan-400 font-bold text-md`}
+      className={`bg-black border-2 hidden border-cyan-400 rounded-md xl:rounded-xl md:flex items-center justify-center text-cyan-400 font-bold text-md`}
       id="bring-to-ar"
       style={{
         width: w ?? "70%",
@@ -18,6 +18,9 @@ export default function BringToVr({ w, p }: { w?: string; p?: string }) {
         paddingRight: p ?? "0.5rem",
         paddingTop: p ? "0.5rem" : "0.5rem",
         paddingBottom: p ? "0.5rem" : "0.5rem",
+      }}
+      onClick={() => {
+        alert("Ar not supported on desktop");
       }}
     >
       BRING TO AR
