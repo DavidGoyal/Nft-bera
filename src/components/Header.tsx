@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import { useState } from "react";
-import BringToVr from "./bring-to-vr";
 import SideRectangle from "./sideRect";
 
 const Header = () => {
@@ -71,7 +70,6 @@ const Header = () => {
       {clicked && (
         <div className="flex xl:hidden fixed top-20 inset-0 bg-black bg-opacity-60 flex-col gap-4 justify-center items-center z-40">
           <SideRectangle text="LOG IN" w={"30%"} />
-          <BringToVr w={"30%"} />
         </div>
       )}
     </>
