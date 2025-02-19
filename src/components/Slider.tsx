@@ -12,7 +12,6 @@ const Slider = () => {
   const [currentIndex, setCurrentIndex] = useState<number>(51);
   const [customize, setCustomize] = useState<boolean>(false);
   const [nftId, setNftId] = useState<string>("");
-  const [isMobile, setIsMobile] = useState(false);
 
   const maxImages = 1533;
   const visibleThumbnails = 7;
@@ -52,19 +51,6 @@ const Slider = () => {
     setCurrentIndex(numId);
     localStorage.setItem("currentIndex", numId.toString());
   };
-
-  useEffect(() => {
-    const mediaQuery = window.matchMedia("(min-width: 500px)");
-    setIsMobile(mediaQuery.matches);
-
-    const handleMediaQueryChange = (event: MediaQueryListEvent) => {
-      setIsMobile(event.matches);
-    };
-
-    mediaQuery.addEventListener("change", handleMediaQueryChange);
-    return () =>
-      mediaQuery.removeEventListener("change", handleMediaQueryChange);
-  }, []);
 
   useEffect(() => {
     if (currentIndex === 1) {
@@ -133,7 +119,7 @@ const Slider = () => {
               height={48}
             />
           </button>
-          {!isMobile && <BringToVr w="40%" />}
+          <BringToVr w="40%" />
           <div className="flex flex-col xl:hidden w-full justify-center items-center gap-6">
             <div className="flex gap-2 items-center justify-center">
               <input
