@@ -22,6 +22,8 @@ function MiddleComponent() {
         .finally(() => {
           setLoading(false);
         });
+    } else if (!isConnecting && !address) {
+      setLoading(false);
     }
   }, [isConnecting, address]);
 
