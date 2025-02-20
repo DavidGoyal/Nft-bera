@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useState } from "react";
 import SideRectangle from "./sideRect";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 const Header = () => {
   const [clicked, setClicked] = useState(false);
@@ -11,7 +12,7 @@ const Header = () => {
     <>
       <div className="w-full flex justify-between items-center absolute top-0 left-0 p-8">
         <h1 className="hidden lg:block text-4xl text-white">
-          CHARACTERS <span className="text-[#00b2ff]">/ HOME</span>
+          ARME <span className="text-[#00b2ff]">/ HOME</span>
         </h1>
 
         <div className="flex lg:hidden gap-4 items-center">
@@ -69,7 +70,8 @@ const Header = () => {
 
       {clicked && (
         <div className="flex lg:hidden fixed top-20 inset-0 bg-black bg-opacity-60 flex-col gap-4 justify-center items-center z-40">
-          <SideRectangle text="LOG IN" w={"30%"} />
+          <ConnectButton />
+          <SideRectangle text="LOG IN" w={"20%"} />
         </div>
       )}
     </>

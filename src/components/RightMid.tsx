@@ -11,29 +11,17 @@ const RightMid = () => {
   };
 
   return (
-    <div className="flex flex-col items-center space-y-6 h-12 w-12 bg-transparent justify-center">
-      {/* Paw Print Icon */}
-      <Image
-        src="/sideRight/CUBAR BLUE 2.png"
-        alt="Paw"
-        onClick={() => handleClick("paw")}
-        className={`cursor-pointer ${
-          activeIcon === "paw" ? "filter-blue" : "filter-white"
-        }`}
-        width={28}
-        height={28}
-      />
-
+    <div className="flex flex-col items-center gap-6 h-12 w-12 bg-transparent justify-center">
       {/* House Icon */}
       <Image
-        src="/sideRight/HOME WHITE 1.png"
+        src="/sideRight/Home.svg"
         alt="House"
         onClick={() => handleClick("house")}
-        className={`cursor-pointer ${
-          activeIcon === "house" ? "filter-blue" : "filter-white"
+        className={`cursor-pointer translate-y-3 ${
+          activeIcon === "house" ? "fill-blue" : " fill-white"
         }`}
-        width={28}
-        height={28}
+        width={40}
+        height={40}
       />
 
       {/* User Icon */}
@@ -42,7 +30,7 @@ const RightMid = () => {
         alt="User"
         onClick={() => handleClick("user")}
         className={`cursor-pointer ${
-          activeIcon === "user" ? "filter-blue" : "filter-white"
+          activeIcon === "user" ? "fill-blue" : "fill-white"
         }`}
         width={28}
         height={28}
@@ -54,7 +42,7 @@ const RightMid = () => {
         alt="Game Controller"
         onClick={() => handleClick("controller")}
         className={`cursor-pointer ${
-          activeIcon === "controller" ? "filter-blue" : "filter-white"
+          activeIcon === "controller" ? "fill-blue" : "fill-white"
         }`}
         width={28}
         height={28}

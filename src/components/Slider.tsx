@@ -5,53 +5,39 @@ import { Suspense, useEffect, useState } from "react";
 import SideRectangle from "./sideRect";
 import BringToVr from "./bring-to-vr";
 import dynamic from "next/dynamic";
+import { FaLocationArrow } from "react-icons/fa";
 
 const NFT = dynamic(() => import("./3D/new-nft"), { ssr: false });
-
-const Slider = () => {
-  const [currentIndex, setCurrentIndex] = useState<number>(51);
+const Slider = ({ nfts }: { nfts: number[] }) => {
+  const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [customize, setCustomize] = useState<boolean>(false);
-  const [nftId, setNftId] = useState<string>("");
+  // const [nftId, setNftId] = useState<string>("");
   const [displayType, setDisplayType] = useState<"3d" | "2d">("2d");
 
-  const maxImages = 1533;
-  const visibleThumbnails = 7;
-  let startIndex = Math.max(
-    51,
-    currentIndex - Math.floor(visibleThumbnails / 2)
-  );
-  if (startIndex + visibleThumbnails > maxImages) {
-    startIndex = maxImages - visibleThumbnails;
-  }
-
   const handlePrev = () => {
-    if (currentIndex > 51) {
+    if (currentIndex > 0) {
       setCurrentIndex((prev) => prev - 1);
-      localStorage.setItem("currentIndex", (currentIndex - 1).toString());
     }
   };
 
   const handleNext = () => {
-    if (currentIndex < maxImages - 1) {
+    if (currentIndex < nfts.length - 1) {
       setCurrentIndex((prev) => prev + 1);
-      localStorage.setItem("currentIndex", (currentIndex + 1).toString());
     }
   };
 
   const updateMainImage = (index: number) => {
     setCurrentIndex(index);
-    localStorage.setItem("currentIndex", index.toString());
   };
 
-  const searchNFT = (id: string) => {
-    const numId = Number(id);
-    if (numId < 1 || numId > maxImages - 1) {
-      alert("Invalid NFT ID");
-      return;
-    }
-    setCurrentIndex(numId);
-    localStorage.setItem("currentIndex", numId.toString());
-  };
+  // const searchNFT = (id: string) => {
+  //   const numId = Number(id);
+  //   if (numId < 1 || numId > maxImages - 1) {
+  //     alert("Invalid NFT ID");
+  //     return;
+  //   }
+  //   setCurrentIndex(numId);
+  // };
 
   useEffect(() => {
     if (customize) {
@@ -60,12 +46,6 @@ const Slider = () => {
       }, 3000);
     }
   }, [customize]);
-
-  useEffect(() => {
-    if (currentIndex === 1) {
-      localStorage.setItem("currentIndex", "1");
-    }
-  }, [currentIndex]);
 
   return (
     <div className="relative flex flex-col items-center h-full w-full lg:justify-between">
@@ -100,13 +80,7 @@ const Slider = () => {
             className="absolute lg:left-0 top-1/4 transform -translate-x-32 lg:-translate-x-12 -translate-y-1/2 flex items-center justify-center w-12 h-12"
             style={{ zIndex: 100 }}
           >
-            <Image
-              src="/Polygon 7.png"
-              alt="Left Arrow"
-              className="w-full h-full object-contain"
-              width={48}
-              height={48}
-            />
+            <FaLocationArrow className="w-full h-full fill-slate-800 -rotate-[135deg]" />
           </button>
           <div className="w-full z-10 flex justify-center items-center !h-[35vh] lg:!h-full relative">
             <Suspense
@@ -114,12 +88,12 @@ const Slider = () => {
                 <div className="!h-[100%] w-full text-white flex items-center justify-center" />
               }
             >
-              {displayType === "3d" && <NFT index={currentIndex} />}
+              {displayType === "3d" && <NFT index={nfts[currentIndex]} />}
               {displayType === "2d" && (
                 <img
-                  src={`https://kingdomly-creator-bucket.s3.us-east-2.amazonaws.com/cubhub-images/images-updated/${currentIndex}.png`}
+                  src={`https://kingdomly-creator-bucket.s3.us-east-2.amazonaws.com/cubhub-images/images-updated/${nfts[currentIndex]}.png`}
                   alt={`Thumbnail ${currentIndex}`}
-                  className="w-auto h-auto max-h-[95%] object-cover bg-transparent rounded-full lg:-translate-y-10"
+                  className="w-auto h-auto max-h-[95%] object-cover bg-transparent rounded-full transform lg:-translate-y-[12%]"
                 />
               )}
             </Suspense>
@@ -147,17 +121,10 @@ const Slider = () => {
             className="absolute lg:right-0 top-1/4 transform translate-x-32 lg:translate-x-12 -translate-y-1/2 flex items-center justify-center w-12 h-12"
             style={{ zIndex: 100 }}
           >
-            <Image
-              src="/Polygon 2.png"
-              alt="Right Arrow"
-              className="w-full h-full object-contain"
-              width={48}
-              height={48}
-            />
+            <FaLocationArrow className="w-full h-full fill-slate-800 rotate-45" />
           </button>
-          <BringToVr w="40%" />
           <div className="flex flex-col lg:hidden w-full justify-center items-center gap-6">
-            <div className="flex gap-2 items-center justify-center">
+            {/* <div className="flex gap-2 items-center justify-center">
               <input
                 type="text"
                 className="border-2 w-[40%] border-cyan-400 rounded-md lg:rounded-xl flex items-center justify-center text-cyan-400 font-bold text-md text-center p-2 bg-transparent placeholder:text-cyan-400 placeholder:font-bold placeholder:text-md placeholder:text-center"
@@ -171,7 +138,8 @@ const Slider = () => {
               >
                 Search
               </button>
-            </div>
+            </div> */}
+
             {!customize ? (
               <>
                 <button
@@ -204,7 +172,7 @@ const Slider = () => {
         </div>
 
         <div className="hidden lg:flex lg:col-span-3 h-full flex-col items-start justify-end gap-4">
-          {
+          {/* {
             <div className="w-full flex gap-2 md:flex-col flex-row lg:flex-row items-center justify-center">
               <input
                 type="text"
@@ -220,34 +188,33 @@ const Slider = () => {
                 Search
               </button>
             </div>
-          }
+          } */}
+          <BringToVr w="80%" />
         </div>
       </div>
 
       {/* Image Slider with 6 images at a time */}
       <div className="hidden lg:flex justify-center items-end gap-12 w-full h-[10%] mt-10">
-        {Array.from({ length: visibleThumbnails }).map((_, index) => {
-          const imgIndex = startIndex + index;
+        {Array.from({ length: 5 }).map((_, index) => {
+          const imgIndex = nfts[index];
           const url = `https://kingdomly-creator-bucket.s3.us-east-2.amazonaws.com/cubhub-images/images-updated/${imgIndex}.png`;
-          return imgIndex <= maxImages ? (
+          return (
             <button
-              key={imgIndex}
-              className={`w-16 h-16 rounded-lg overflow-hidden border-2 ${
-                imgIndex === currentIndex
+              key={index}
+              className={`w-20 h-20 rounded-lg overflow-hidden border-[1px] ${
+                index === currentIndex
                   ? "border-blue-500 border-[4px]"
                   : "border-transparent"
               }`}
-              onClick={() => updateMainImage(imgIndex)}
+              onClick={() => updateMainImage(index)}
             >
               <img
                 src={url}
                 alt={`Thumbnail ${imgIndex}`}
-                className="w-full h-full object-cover"
-                width={56}
-                height={56}
+                className="w-full h-full scale-[3] object-bottom translate-y-10"
               />
             </button>
-          ) : null;
+          );
         })}
       </div>
     </div>

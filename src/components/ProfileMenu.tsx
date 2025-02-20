@@ -1,9 +1,14 @@
 import Image from "next/image";
-import React from "react";
 
 const ProfileMenu = () => {
   return (
-    <div className="flex flex-col items-center w-16 bg-black rounded-full border-2 border-cyan-500 gap-4 pb-4">
+    <div className="flex flex-col items-center w-16 bg-black rounded-full border-2 border-cyan-500 gap-4 pb-4 relative">
+      <p
+        className="absolute w-auto top-18 right-30 text-[#00B2FF] text-sm"
+        style={{ transform: "translateX(-100%) translateY(100%)" }}
+      >
+        Master Cub
+      </p>
       {/* Profile Picture */}
       <div className="w-full h-16 rounded-full overflow-hidden border-2 border-cyan-500">
         <Image

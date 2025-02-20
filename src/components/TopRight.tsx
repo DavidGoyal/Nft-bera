@@ -1,7 +1,7 @@
 "use client"; // Add this line at the very top of your file
 
 import Image from "next/image";
-import React, { useState } from "react";
+import { useState } from "react";
 
 const VerticalCapsule = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

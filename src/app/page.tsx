@@ -1,8 +1,7 @@
 import AnimationsMenu from "@/components/AnimationMenu";
 import Header from "@/components/Header";
-import ProfileMenu from "@/components/ProfileMenu";
-import RightMid from "@/components/RightMid";
-import Slider from "@/components/Slider";
+import MiddleComponent from "@/components/MiddleComponent";
+import RightSide from "@/components/Right-side";
 
 export default function Home() {
   return (
@@ -12,20 +11,9 @@ export default function Home() {
         <AnimationsMenu />
       </div>
 
-      <div className="col-span-12 lg:col-span-8 h-full flex flex-col p-8">
-        <Slider />
-      </div>
+      <MiddleComponent />
 
-      <div className="hidden lg:flex lg:col-span-2 h-full flex-col items-end justify-start gap-[25%] p-8 relative">
-        <p
-          className="absolute top-18 right-30 text-[#00B2FF] text-sm"
-          style={{ transform: "translateX(-100%) translateY(100%)" }}
-        >
-          Master Cub
-        </p>
-        <ProfileMenu />
-        <RightMid />
-      </div>
+      <RightSide />
     </div>
   );
 }
