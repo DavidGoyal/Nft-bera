@@ -7,11 +7,12 @@ import { getNFTs } from "@/utils/get-nfts";
 const defaultNftIDS = [81, 82, 83, 84, 85];
 
 function MiddleComponent() {
-  const { isConnecting, address } = useAccount();
+  const { isConnecting, address, isConnected, isDisconnected } = useAccount();
   const [loading, setLoading] = useState(true);
   const [nfts, setNfts] = useState<number[]>(defaultNftIDS);
 
   useEffect(() => {
+    setLoading(true);
     if (!isConnecting && address) {
       getNFTs({ walletAddress: address })
         .then((data) => {
@@ -22,10 +23,11 @@ function MiddleComponent() {
         .finally(() => {
           setLoading(false);
         });
-    } else if (!isConnecting && !address) {
+    } else if (!isConnecting && !isConnected && !address && isDisconnected) {
       setLoading(false);
+      setNfts(defaultNftIDS);
     }
-  }, [isConnecting, address]);
+  }, [isConnecting, address, isConnected, isDisconnected]);
 
   return (
     <div className="col-span-12 lg:col-span-8 h-full flex flex-col p-8">
