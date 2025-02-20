@@ -14,6 +14,16 @@ const Slider = ({ nfts }: { nfts: number[] }) => {
   // const [nftId, setNftId] = useState<string>("");
   const [displayType, setDisplayType] = useState<"3d" | "2d">("2d");
 
+  const maxImages = nfts.length;
+  const visibleThumbnails = 5;
+  let startIndex = Math.max(
+    0,
+    currentIndex - Math.floor(visibleThumbnails / 2)
+  );
+  if (startIndex + visibleThumbnails > maxImages) {
+    startIndex = maxImages - visibleThumbnails;
+  }
+
   const handlePrev = () => {
     if (currentIndex > 0) {
       setCurrentIndex((prev) => prev - 1);
@@ -196,17 +206,17 @@ const Slider = ({ nfts }: { nfts: number[] }) => {
       {/* Image Slider with 6 images at a time */}
       <div className="hidden lg:flex justify-center items-end gap-12 w-full h-[10%] mt-10">
         {Array.from({ length: 5 }).map((_, index) => {
-          const imgIndex = nfts[index];
+          const imgIndex = nfts[startIndex + index];
           const url = `https://kingdomly-creator-bucket.s3.us-east-2.amazonaws.com/cubhub-images/images-updated/${imgIndex}.png`;
-          return (
+          return startIndex + index < maxImages ? (
             <button
               key={index}
               className={`w-20 h-20 rounded-lg overflow-hidden border-[1px] ${
-                index === currentIndex
+                startIndex + index === currentIndex
                   ? "border-blue-500 border-[4px]"
                   : "border-transparent"
               }`}
-              onClick={() => updateMainImage(index)}
+              onClick={() => updateMainImage(startIndex + index)}
             >
               <img
                 src={url}
@@ -214,7 +224,7 @@ const Slider = ({ nfts }: { nfts: number[] }) => {
                 className="w-full h-full scale-[3] object-bottom translate-y-10"
               />
             </button>
-          );
+          ) : null;
         })}
       </div>
     </div>
