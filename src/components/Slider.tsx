@@ -12,7 +12,7 @@ const Slider = () => {
   const [currentIndex, setCurrentIndex] = useState<number>(51);
   const [customize, setCustomize] = useState<boolean>(false);
   const [nftId, setNftId] = useState<string>("");
-  const [displayType, setDisplayType] = useState<"3d" | "2d">("3d");
+  const [displayType, setDisplayType] = useState<"3d" | "2d">("2d");
 
   const maxImages = 1533;
   const visibleThumbnails = 7;
@@ -69,7 +69,7 @@ const Slider = () => {
 
   return (
     <div className="relative flex flex-col items-center h-full w-full lg:justify-between">
-      <div className="grid grid-cols-12 h-full lg:h-[70%] w-full pt-14 lg:pt-0 mt-14">
+      <div className="grid grid-cols-12 h-full lg:h-[75%] w-full pt-14 lg:pt-0 mt-14">
         <div className="hidden lg:flex lg:col-span-3 h-full flex-col justify-end gap-4 items-end">
           {!customize ? (
             <button
@@ -85,10 +85,10 @@ const Slider = () => {
           )}
         </div>
 
-        <div className="col-span-12 lg:col-span-6 h-full relative flex flex-col items-center justify-between lg:justify-end gap-12 lg:gap-12">
+        <div className="col-span-12 lg:col-span-6 h-full relative flex flex-col items-center justify-between gap-12">
           {displayType === "3d" && (
             <div
-              className="hidden lg:block absolute lg:w-[360px] lg:h-[360px] xl:w-[460px] xl:h-[460px] rounded-full top-[35%] transform -translate-y-1/2"
+              className="hidden lg:block absolute lg:w-[360px] lg:h-[360px] xl:w-[440px] xl:h-[440px] rounded-full top-[35%] transform -translate-y-[48%]"
               style={{
                 background: "linear-gradient(to bottom, #FFFFFF, #A412FF)",
                 zIndex: 3,
@@ -119,7 +119,7 @@ const Slider = () => {
                 <img
                   src={`https://kingdomly-creator-bucket.s3.us-east-2.amazonaws.com/cubhub-images/images-updated/${currentIndex}.png`}
                   alt={`Thumbnail ${currentIndex}`}
-                  className="w-auto h-auto max-h-[95%] xl:h-[95%] object-cover bg-transparent rounded-full lg:-translate-y-10"
+                  className="w-auto h-auto max-h-[95%] object-cover bg-transparent rounded-full lg:-translate-y-10"
                 />
               )}
             </Suspense>
