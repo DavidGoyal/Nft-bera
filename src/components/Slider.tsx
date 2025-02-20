@@ -228,6 +228,7 @@ const Slider = () => {
       <div className="hidden lg:flex justify-center items-end gap-12 w-full h-[10%] mt-10">
         {Array.from({ length: visibleThumbnails }).map((_, index) => {
           const imgIndex = startIndex + index;
+          const url = `https://kingdomly-creator-bucket.s3.us-east-2.amazonaws.com/cubhub-images/images-updated/${imgIndex}.png`;
           return imgIndex <= maxImages ? (
             <button
               key={imgIndex}
@@ -239,7 +240,7 @@ const Slider = () => {
               onClick={() => updateMainImage(imgIndex)}
             >
               <img
-                src={`https://kingdomly-creator-bucket.s3.us-east-2.amazonaws.com/cubhub-images/images-updated/${imgIndex}.png`}
+                src={url}
                 alt={`Thumbnail ${imgIndex}`}
                 className="w-full h-full object-cover"
                 width={56}

@@ -36,7 +36,7 @@ const ThreeScene = ({ index }: { index: number }) => {
     modelViewer.setAttribute("interaction-prompt", "auto"); // Show interaction hint
 
     // Additional attributes for better experience
-    modelViewer.setAttribute("scale", "0.3 0.3 0.3");
+    modelViewer.setAttribute("scale", "0.1 0.1 0.1");
     modelViewer.setAttribute("environment-image", "neutral");
     modelViewer.setAttribute("shadow-intensity", "1");
     modelViewer.setAttribute("shadow-softness", "1");
