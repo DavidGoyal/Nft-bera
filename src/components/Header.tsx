@@ -10,11 +10,11 @@ const Header = () => {
   return (
     <>
       <div className="w-full flex justify-between items-center absolute top-0 left-0 p-8">
-        <h1 className="hidden xl:block text-4xl text-white">
+        <h1 className="hidden lg:block text-4xl text-white">
           CHARACTERS <span className="text-[#00b2ff]">/ HOME</span>
         </h1>
 
-        <div className="flex xl:hidden gap-4 items-center">
+        <div className="flex lg:hidden gap-4 items-center">
           <div className="h-12 rounded-full overflow-hidden border-2 border-cyan-500">
             <Image
               src="/glbimage1.png" // Replace with actual image path
@@ -45,7 +45,7 @@ const Header = () => {
         </div>
 
         <button
-          className="block xl:hidden z-20"
+          className="block lg:hidden z-20"
           onClick={() => setClicked(!clicked)}
         >
           <svg
@@ -68,7 +68,7 @@ const Header = () => {
       </div>
 
       {clicked && (
-        <div className="flex xl:hidden fixed top-20 inset-0 bg-black bg-opacity-60 flex-col gap-4 justify-center items-center z-40">
+        <div className="flex lg:hidden fixed top-20 inset-0 bg-black bg-opacity-60 flex-col gap-4 justify-center items-center z-40">
           <SideRectangle text="LOG IN" w={"30%"} />
         </div>
       )}

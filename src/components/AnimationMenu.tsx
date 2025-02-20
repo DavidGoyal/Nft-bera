@@ -21,7 +21,7 @@ const AnimationsMenu = () => {
 
   return !clicked ? (
     <button
-      className="bg-black rounded-md xl:rounded-xl flex items-center border-2 border-cyan-400 justify-center text-cyan-400 font-bold text-md px-6 py-2"
+      className="bg-black rounded-md lg:rounded-xl flex items-center border-2 border-cyan-400 justify-center text-cyan-400 font-bold text-md px-6 py-2"
       onClick={() => setClicked(true)}
     >
       Animations
