@@ -41,7 +41,7 @@ const ThreeScene = ({ index }: { index: number }) => {
     modelViewer.setAttribute("shadow-intensity", "1");
     modelViewer.setAttribute("shadow-softness", "1");
     modelViewer.setAttribute("exposure", "1");
-    modelViewer.setAttribute("loading", "eager");
+    modelViewer.setAttribute("loading", "auto");
     modelViewer.setAttribute("allow", "xr-spatial-tracking");
 
     // Styling and positioning

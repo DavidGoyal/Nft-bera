@@ -12,6 +12,7 @@ const Slider = () => {
   const [currentIndex, setCurrentIndex] = useState<number>(51);
   const [customize, setCustomize] = useState<boolean>(false);
   const [nftId, setNftId] = useState<string>("");
+  const [displayType, setDisplayType] = useState<"3d" | "2d">("2d");
 
   const maxImages = 1533;
   const visibleThumbnails = 7;
@@ -85,13 +86,15 @@ const Slider = () => {
         </div>
 
         <div className="col-span-12 xl:col-span-6 h-full relative flex flex-col items-center justify-between xl:justify-end gap-12 xl:gap-12">
-          <div
-            className="hidden xl:block absolute w-[450px] h-[450px] rounded-full top-[35%] transform -translate-y-1/2"
-            style={{
-              background: "linear-gradient(to bottom, #FFFFFF, #A412FF)",
-              zIndex: 3,
-            }}
-          ></div>
+          {displayType === "3d" && (
+            <div
+              className="hidden xl:block absolute w-[460px] h-[460px] rounded-full top-[35%] transform -translate-y-1/2"
+              style={{
+                background: "linear-gradient(to bottom, #FFFFFF, #A412FF)",
+                zIndex: 3,
+              }}
+            ></div>
+          )}
           <button
             onClick={handlePrev}
             className="absolute xl:left-0 top-1/4 transform -translate-x-32 xl:-translate-x-12 -translate-y-1/2 flex items-center justify-center w-12 h-12"
@@ -105,14 +108,39 @@ const Slider = () => {
               height={48}
             />
           </button>
-          <div className="w-full z-10 flex justify-center items-center !h-[35vh] xl:!h-full">
+          <div className="w-full z-10 flex justify-center items-center !h-[35vh] xl:!h-full relative">
             <Suspense
               fallback={
                 <div className="!h-[100%] w-full text-white flex items-center justify-center" />
               }
             >
-              <NFT index={currentIndex} />
+              {displayType === "3d" && <NFT index={currentIndex} />}
+              {displayType === "2d" && (
+                <img
+                  src={`https://kingdomly-creator-bucket.s3.us-east-2.amazonaws.com/cubhub-images/images-updated/${currentIndex}.png`}
+                  alt={`Thumbnail ${currentIndex}`}
+                  className="w-full h-[95%] object-cover bg-transparent rounded-full -translate-y-10"
+                />
+              )}
             </Suspense>
+            <div className="absolute bottom-0 h-fit right-[-10px] lg:top-0 lg:right-0 flex justify-center items-center bg-slate-300 rounded-md text-black">
+              <button
+                onClick={() => setDisplayType("2d")}
+                className={`${
+                  displayType === "2d" ? "bg-slate-400" : ""
+                } p-3 rounded-md`}
+              >
+                2D
+              </button>
+              <button
+                onClick={() => setDisplayType("3d")}
+                className={`${
+                  displayType === "3d" ? "bg-slate-400" : ""
+                } p-3 rounded-md`}
+              >
+                3D
+              </button>
+            </div>
           </div>
           <button
             onClick={handleNext}
