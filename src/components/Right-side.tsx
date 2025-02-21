@@ -14,7 +14,7 @@ function RightSide() {
   }, []);
 
   return (
-    <div className="hidden lg:flex lg:col-span-2 h-full flex-col items-end justify-start gap-[25%] p-8">
+    <div className="hidden lg:flex lg:col-span-2 h-full flex-col items-end justify-start gap-[23%] xl:gap-[25%] p-8">
       {!mounted ? (
         <Skeleton className="w-[120px] h-[60px] rounded-full bg-gray-200" />
       ) : (

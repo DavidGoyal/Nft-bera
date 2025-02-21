@@ -204,14 +204,14 @@ const Slider = ({ nfts }: { nfts: number[] }) => {
       </div>
 
       {/* Image Slider with 6 images at a time */}
-      <div className="hidden lg:flex justify-center items-end gap-12 w-full h-[10%] mt-10">
+      <div className="hidden lg:flex justify-center items-end gap-12 w-full h-[10%] mt-16">
         {Array.from({ length: 5 }).map((_, index) => {
           const imgIndex = nfts[startIndex + index];
           const url = `https://kingdomly-creator-bucket.s3.us-east-2.amazonaws.com/cubhub-images/images-updated/${imgIndex}.png`;
           return startIndex + index < maxImages ? (
             <button
               key={index}
-              className={`w-20 h-20 rounded-lg overflow-hidden border-[1px] ${
+              className={`w-26 h-28 rounded-lg overflow-hidden border-[1px] ${
                 startIndex + index === currentIndex
                   ? "border-blue-500 border-[4px]"
                   : "border-transparent"
@@ -221,7 +221,7 @@ const Slider = ({ nfts }: { nfts: number[] }) => {
               <img
                 src={url}
                 alt={`Thumbnail ${imgIndex}`}
-                className="w-full h-full scale-[3] object-bottom translate-y-10"
+                className="w-full h-full scale-[3] object-bottom translate-y-12 translate-x-1"
               />
             </button>
           ) : null;
