@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useState } from "react";
 import SideRectangle from "./sideRect";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
+import WalletButton from "./ui/connect-button";
 
 const Header = () => {
   const [clicked, setClicked] = useState(false);
@@ -70,7 +70,7 @@ const Header = () => {
 
       {clicked && (
         <div className="flex lg:hidden fixed top-20 inset-0 bg-black bg-opacity-60 flex-col gap-4 justify-center items-center z-40">
-          <ConnectButton />
+          <WalletButton />
           <SideRectangle text="LOG IN" w={"20%"} />
         </div>
       )}

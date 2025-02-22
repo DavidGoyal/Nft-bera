@@ -1,9 +1,9 @@
 "use client";
 
-import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useEffect, useState } from "react";
 import ProfileMenu from "./ProfileMenu";
 import RightMid from "./RightMid";
+import WalletButton from "./ui/connect-button";
 import { Skeleton } from "./ui/skeleton";
 
 function RightSide() {
@@ -18,7 +18,7 @@ function RightSide() {
       {!mounted ? (
         <Skeleton className="w-[120px] h-[60px] rounded-full bg-gray-200" />
       ) : (
-        <ConnectButton />
+        <WalletButton />
       )}
       <ProfileMenu />
       <RightMid />
