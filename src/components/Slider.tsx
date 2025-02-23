@@ -166,7 +166,7 @@ const Slider = ({ nfts }: { nfts: number[] }) => {
             )}
           </div>
 
-          <div className="flex lg:hidden w-full justify-center items-center gap-10 mb-10">
+          <div className="flex lg:hidden w-full justify-center items-center gap-10 mb-14">
             <p className="text-[#00B2FF] text-lg font-semibold p-1">Games</p>
             <Image
               src="/paw-logo.webp"

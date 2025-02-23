@@ -4,6 +4,7 @@
 
 body {
   font-family: Arial, Helvetica, sans-serif;
+  height: 100%;
 }
 
 model-viewer::part(default-ar-button) {
