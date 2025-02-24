@@ -15,15 +15,36 @@ function MiddleComponent() {
     setLoading(true);
     if (!isConnecting && address) {
       getNFTs({ walletAddress: address })
-        .then((data) => {
+        .then(async (data) => {
           if (data.length > 0) {
             setNfts(data);
+            // Pre-fetch 3D models
+            await Promise.all(
+              data.map(async (nftId) => {
+                const modelUrl = `https://kingdomly-creator-bucket.s3.us-east-2.amazonaws.com/cubhub-glbs/glb-updated/glb/${nftId}.glb`;
+                const response = await fetch(modelUrl);
+                if (response.ok) {
+                  console.log(`Model ${nftId} prefetched successfully`);
+                } else {
+                  console.warn(`Failed to prefetch model ${nftId}`);
+                }
+              })
+            );
           }
         })
         .finally(() => {
           setLoading(false);
         });
     } else if (!isConnecting && !isConnected && !address && isDisconnected) {
+      nfts.map(async (nftId) => {
+        const modelUrl = `https://kingdomly-creator-bucket.s3.us-east-2.amazonaws.com/cubhub-glbs/glb-updated/glb/${nftId}.glb`;
+        const response = await fetch(modelUrl);
+        if (response.ok) {
+          console.log(`Model ${nftId} prefetched successfully`);
+        } else {
+          console.warn(`Failed to prefetch model ${nftId}`);
+        }
+      });
       setLoading(false);
       setNfts(defaultNftIDS);
     }

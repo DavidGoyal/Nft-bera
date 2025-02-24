@@ -3,11 +3,13 @@ import React from "react";
 
 function WalletButton() {
   return (
-    <ConnectButton
-      showBalance={false}
-      chainStatus={"none"}
-      accountStatus={"address"}
-    />
+    <div className="w-fit h-fit border-2 border-cyan-400 rounded-xl p-[0.5px]">
+      <ConnectButton
+        showBalance={false}
+        chainStatus={"none"}
+        accountStatus={"address"}
+      />
+    </div>
   );
 }
 

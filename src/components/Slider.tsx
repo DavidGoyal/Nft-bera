@@ -6,6 +6,7 @@ import SideRectangle from "./sideRect";
 import BringToVr from "./bring-to-vr";
 import dynamic from "next/dynamic";
 import { FaLocationArrow } from "react-icons/fa";
+import DownloadButton from "./ui/download-button";
 
 const NFT = dynamic(() => import("./3D/new-nft"), { ssr: false });
 const Slider = ({ nfts }: { nfts: number[] }) => {
@@ -59,7 +60,7 @@ const Slider = ({ nfts }: { nfts: number[] }) => {
 
   return (
     <div className="relative flex flex-col items-center h-full w-full lg:justify-between">
-      <div className="grid grid-cols-12 h-full lg:h-[75%] w-full pt-14 lg:pt-0 mt-14">
+      <div className="grid grid-cols-12 h-full w-full pt-14 lg:pt-0 mt-14">
         <div className="hidden lg:flex lg:col-span-3 h-full flex-col justify-end gap-4 items-end">
           {!customize ? (
             <button
@@ -107,20 +108,30 @@ const Slider = ({ nfts }: { nfts: number[] }) => {
                 />
               )}
             </Suspense>
-            <div className="absolute bottom-0 h-fit w-fit left-[-10px] lg:top-0 lg:right-0 flex justify-center items-center bg-slate-300 rounded-md text-black">
+            {displayType === "2d" && (
+              <DownloadButton
+                url={`https://kingdomly-creator-bucket.s3.us-east-2.amazonaws.com/cubhub-images/images-updated/${nfts[currentIndex]}.png`}
+              />
+            )}
+            <div className="absolute bottom-0 h-14 w-32 left-[-10px] lg:top-0 lg:right-0 flex justify-center items-center bg-transparent text-cyan-800 font-bold border-cyan-400 border-2">
               <button
                 onClick={() => setDisplayType("2d")}
+                //push it inside when clicked
                 className={`${
-                  displayType === "2d" ? "bg-slate-400" : ""
-                } p-3 rounded-md`}
+                  displayType === "2d"
+                    ? "text-cyan-400 border-b-4 border-blue-700"
+                    : ""
+                } h-full w-12 text-center`}
               >
                 2D
               </button>
               <button
                 onClick={() => setDisplayType("3d")}
                 className={`${
-                  displayType === "3d" ? "bg-slate-400" : ""
-                } p-3 rounded-md`}
+                  displayType === "3d"
+                    ? "text-cyan-400 border-b-4 border-blue-700"
+                    : ""
+                } h-full w-12 text-center`}
               >
                 3D
               </button>
