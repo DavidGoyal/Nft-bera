@@ -60,7 +60,7 @@ const Slider = ({ nfts }: { nfts: number[] }) => {
 
   return (
     <div className="relative flex flex-col items-center h-full w-full lg:justify-between">
-      <div className="grid grid-cols-12 h-full w-full pt-14 lg:pt-0 mt-14">
+      <div className="grid grid-cols-12 h-full lg:h-[90%] w-full pt-14 lg:pt-0 mt-14">
         <div className="hidden lg:flex lg:col-span-3 h-full flex-col justify-end gap-4 items-end">
           {!customize ? (
             <button
