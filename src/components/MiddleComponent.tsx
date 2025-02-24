@@ -4,12 +4,45 @@ import React, { useEffect, useState } from "react";
 import Slider from "./Slider";
 import { useAccount } from "wagmi";
 import { getNFTs } from "@/utils/get-nfts";
+
 const defaultNftIDS = [81, 82, 83, 84, 85];
 
 function MiddleComponent() {
   const { isConnecting, address, isConnected, isDisconnected } = useAccount();
   const [loading, setLoading] = useState(true);
   const [nfts, setNfts] = useState<number[]>(defaultNftIDS);
+
+  async function preloadAndCacheModels(nftIds: number[]) {
+    await Promise.all(
+      nftIds.map(async (nftId) => {
+        const modelUrl = `https://kingdomly-creator-bucket.s3.us-east-2.amazonaws.com/cubhub-glbs/glb-updated/glb/${nftId}.glb`;
+
+        // First check if it's in cache
+        const cache = await caches.open("model-cache");
+        const cachedResponse = await cache.match(modelUrl);
+
+        if (!cachedResponse) {
+          try {
+            const response = await fetch(modelUrl, {
+              method: "GET",
+              cache: "force-cache", // This tells the browser to prefer cached version
+            });
+
+            if (response.ok) {
+              await cache.put(modelUrl, response.clone());
+              console.log(`Model ${nftId} cached successfully`);
+            } else {
+              console.warn(`Failed to cache model ${nftId}`);
+            }
+          } catch (error) {
+            console.warn(`Error caching model ${nftId}:`, error);
+          }
+        } else {
+          console.log(`Model ${nftId} already in cache`);
+        }
+      })
+    );
+  }
 
   useEffect(() => {
     setLoading(true);
@@ -18,35 +51,17 @@ function MiddleComponent() {
         .then(async (data) => {
           if (data.length > 0) {
             setNfts(data);
-            // Pre-fetch 3D models
-            await Promise.all(
-              data.map(async (nftId) => {
-                const modelUrl = `https://kingdomly-creator-bucket.s3.us-east-2.amazonaws.com/cubhub-glbs/glb-updated/glb/${nftId}.glb`;
-                const response = await fetch(modelUrl);
-                if (response.ok) {
-                  console.log(`Model ${nftId} prefetched successfully`);
-                } else {
-                  console.warn(`Failed to prefetch model ${nftId}`);
-                }
-              })
-            );
+            await preloadAndCacheModels(data);
           }
         })
         .finally(() => {
           setLoading(false);
         });
     } else if (!isConnecting && !isConnected && !address && isDisconnected) {
-      nfts.map(async (nftId) => {
-        const modelUrl = `https://kingdomly-creator-bucket.s3.us-east-2.amazonaws.com/cubhub-glbs/glb-updated/glb/${nftId}.glb`;
-        const response = await fetch(modelUrl);
-        if (response.ok) {
-          console.log(`Model ${nftId} prefetched successfully`);
-        } else {
-          console.warn(`Failed to prefetch model ${nftId}`);
-        }
+      preloadAndCacheModels(defaultNftIDS).finally(() => {
+        setLoading(false);
+        setNfts(defaultNftIDS);
       });
-      setLoading(false);
-      setNfts(defaultNftIDS);
     }
   }, [isConnecting, address, isConnected, isDisconnected]);
 
