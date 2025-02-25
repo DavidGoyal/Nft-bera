@@ -76,7 +76,7 @@ const Slider = ({ nfts }: { nfts: number[] }) => {
           )}
         </div>
 
-        <div className="col-span-12 lg:col-span-6 h-full relative flex flex-col items-center justify-start gap-[15%] lg:justify-between lg:gap-12">
+        <div className="col-span-12 lg:col-span-6 h-full relative flex flex-col items-center justify-start gap-[13%] lg:justify-between lg:gap-12">
           {displayType === "3d" && (
             <div
               className="hidden lg:block absolute lg:w-[360px] lg:h-[360px] xl:w-[440px] xl:h-[440px] rounded-full top-[35%] transform -translate-y-[48%]"
