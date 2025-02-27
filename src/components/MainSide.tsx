@@ -5,7 +5,7 @@ import { useAccount } from "wagmi";
 import AnimationsMenu from "./AnimationMenu";
 import MiddleComponent from "./MiddleComponent";
 import { getNFTs } from "@/utils/get-nfts";
-const defaultNftIDS = [81, 82, 83, 84, 85];
+const defaultNftIDS = [85, 86, 87, 88, 89];
 
 function MainSide() {
   const { isConnecting, address, isConnected, isDisconnected } = useAccount();
@@ -13,32 +13,27 @@ function MainSide() {
   const [nfts, setNfts] = useState<number[]>([]);
 
   async function preloadAndCacheModels(nftIds: number[]) {
+    // Add new models to cache
     await Promise.all(
       nftIds.map(async (nftId) => {
         const modelUrl = `https://kingdomly-creator-bucket.s3.us-east-2.amazonaws.com/cubhub-glbs/glb-updated/glb/${nftId}.glb`;
 
-        // First check if it's in cache
-        const cache = await caches.open("model-cache");
-        const cachedResponse = await cache.match(modelUrl);
+        try {
+          // Force a new fetch every time
+          const response = await fetch(modelUrl, {
+            method: "GET",
+            cache: "reload", // Forces a new request
+          });
 
-        if (!cachedResponse) {
-          try {
-            const response = await fetch(modelUrl, {
-              method: "GET",
-              cache: "force-cache", // This tells the browser to prefer cached version
-            });
-
-            if (response.ok) {
-              await cache.put(modelUrl, response.clone());
-              console.log(`Model ${nftId} cached successfully`);
-            } else {
-              console.warn(`Failed to cache model ${nftId}`);
-            }
-          } catch (error) {
-            console.warn(`Error caching model ${nftId}:`, error);
+          if (response.ok) {
+            const cache = await caches.open("model-cache");
+            await cache.put(modelUrl, response.clone());
+            console.log(`Model ${nftId} cached successfully`);
+          } else {
+            console.warn(`Failed to cache model ${nftId}`);
           }
-        } else {
-          console.log(`Model ${nftId} already in cache`);
+        } catch (error) {
+          console.warn(`Error caching model ${nftId}:`, error);
         }
       })
     );
