@@ -1,3 +1,5 @@
+"use client";
+
 import Slider from "./Slider";
 
 function MiddleComponent({

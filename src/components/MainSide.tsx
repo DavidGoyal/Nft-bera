@@ -12,39 +12,39 @@ function MainSide() {
   const [loading, setLoading] = useState(true);
   const [nfts, setNfts] = useState<number[]>([]);
 
-  //  async function preloadAndCacheModels(nftIds: number[]) {
-  //     // Add new models to cache
-  //     const cache = await caches.open("model-cache");
-  //     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-  //     console.log(navigator.userAgent);
+  async function preloadAndCacheModels(nftIds: number[]) {
+    // Add new models to cache
+    const cache = await caches.open("model-cache");
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    console.log(navigator.userAgent);
 
-  //     if (isIOS) return;
-  //     await Promise.all(
-  //       nftIds.map(async (nftId) => {
-  //         const modelUrl = `https://kingdomly-creator-bucket.s3.us-east-2.amazonaws.com/cubhub-glbs/glb-updated/glb/${nftId}.glb`;
+    if (isIOS) return;
+    await Promise.all(
+      nftIds.map(async (nftId) => {
+        const modelUrl = `https://kingdomly-creator-bucket.s3.us-east-2.amazonaws.com/cubhub-glbs/glb-updated/glb/${nftId}.glb`;
 
-  //         try {
-  //           // Force a new fetch every time
-  //           const response = await fetch(modelUrl, {
-  //             method: "GET",
-  //             cache: "reload", // Forces a new request
-  //             headers: {
-  //               Accept: "model/gltf-binary",
-  //             },
-  //           });
+        try {
+          // Force a new fetch every time
+          const response = await fetch(modelUrl, {
+            method: "GET",
+            cache: "reload", // Forces a new request
+            headers: {
+              Accept: "model/gltf-binary",
+            },
+          });
 
-  //           if (response.ok) {
-  //             await cache.put(modelUrl, response.clone());
-  //             console.log(`Model ${nftId} cached successfully`);
-  //           } else {
-  //             console.warn(`Failed to cache model ${nftId}`);
-  //           }
-  //         } catch (error) {
-  //           console.warn(`Error caching model ${nftId}:`, error);
-  //         }
-  //       })
-  //     );
-  //   }
+          if (response.ok) {
+            await cache.put(modelUrl, response.clone());
+            console.log(`Model ${nftId} cached successfully`);
+          } else {
+            console.warn(`Failed to cache model ${nftId}`);
+          }
+        } catch (error) {
+          console.warn(`Error caching model ${nftId}:`, error);
+        }
+      })
+    );
+  }
 
   useEffect(() => {
     setLoading(true);
@@ -52,18 +52,16 @@ function MainSide() {
       getNFTs({ walletAddress: address })
         .then(async (data) => {
           setNfts(data);
-          // await preloadAndCacheModels(data);
+          await preloadAndCacheModels(data);
         })
         .finally(() => {
           setLoading(false);
         });
     } else if (!isConnecting && !isConnected && !address && isDisconnected) {
-      // preloadAndCacheModels(defaultNftIDS).finally(() => {
-      //   setLoading(false);
-      //   setNfts(defaultNftIDS);
-      // });
-      setLoading(false);
-      setNfts(defaultNftIDS);
+      preloadAndCacheModels(defaultNftIDS).finally(() => {
+        setLoading(false);
+        setNfts(defaultNftIDS);
+      });
     }
   }, [isConnecting, address, isConnected, isDisconnected]);
   return (
