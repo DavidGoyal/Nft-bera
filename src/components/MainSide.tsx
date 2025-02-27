@@ -16,6 +16,7 @@ function MainSide() {
     // Add new models to cache
     const cache = await caches.open("model-cache");
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    console.log(navigator.userAgent);
 
     if (isIOS) return;
     await Promise.all(
@@ -51,16 +52,18 @@ function MainSide() {
       getNFTs({ walletAddress: address })
         .then(async (data) => {
           setNfts(data);
-          await preloadAndCacheModels(data);
+          // await preloadAndCacheModels(data);
         })
         .finally(() => {
           setLoading(false);
         });
     } else if (!isConnecting && !isConnected && !address && isDisconnected) {
-      preloadAndCacheModels(defaultNftIDS).finally(() => {
-        setLoading(false);
-        setNfts(defaultNftIDS);
-      });
+      // preloadAndCacheModels(defaultNftIDS).finally(() => {
+      //   setLoading(false);
+      //   setNfts(defaultNftIDS);
+      // });
+      setLoading(false);
+      setNfts(defaultNftIDS);
     }
   }, [isConnecting, address, isConnected, isDisconnected]);
   return (
