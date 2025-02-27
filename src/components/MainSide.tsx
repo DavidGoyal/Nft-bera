@@ -5,7 +5,7 @@ import { useAccount } from "wagmi";
 import AnimationsMenu from "./AnimationMenu";
 import MiddleComponent from "./MiddleComponent";
 import { getNFTs } from "@/utils/get-nfts";
-const defaultNftIDS = [85, 86, 87, 88, 89];
+const defaultNftIDS = [81, 82, 83, 84, 85];
 
 function MainSide() {
   const { isConnecting, address, isConnected, isDisconnected } = useAccount();
@@ -14,6 +14,7 @@ function MainSide() {
 
   async function preloadAndCacheModels(nftIds: number[]) {
     // Add new models to cache
+    const cache = await caches.open("model-cache");
     await Promise.all(
       nftIds.map(async (nftId) => {
         const modelUrl = `https://kingdomly-creator-bucket.s3.us-east-2.amazonaws.com/cubhub-glbs/glb-updated/glb/${nftId}.glb`;
@@ -23,10 +24,12 @@ function MainSide() {
           const response = await fetch(modelUrl, {
             method: "GET",
             cache: "reload", // Forces a new request
+            headers: {
+              Accept: "model/gltf-binary",
+            },
           });
 
           if (response.ok) {
-            const cache = await caches.open("model-cache");
             await cache.put(modelUrl, response.clone());
             console.log(`Model ${nftId} cached successfully`);
           } else {

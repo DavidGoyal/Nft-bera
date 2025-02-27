@@ -50,7 +50,17 @@ const ThreeScene = ({ index }: { index: number }) => {
     modelViewer.style.touchAction = "none"; // Let model-viewer handle gestures
     modelViewer.style.background = "transparent";
 
+    modelViewer.addEventListener("error", (error) => {
+      console.error("Error loading model:", error);
+      setIsLoading(false);
+    });
+
+    const loadingTimeout = setTimeout(() => {
+      setIsLoading(false);
+    }, 15000); // 15 second timeout
+
     modelViewer.addEventListener("load", () => {
+      clearTimeout(loadingTimeout);
       setIsLoading(false);
     });
 
@@ -60,6 +70,7 @@ const ThreeScene = ({ index }: { index: number }) => {
 
     // Cleanup
     return () => {
+      clearTimeout(loadingTimeout);
       if (modelViewerRef.current && currentRef) {
         currentRef.removeChild(modelViewerRef.current);
       }
