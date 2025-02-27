@@ -15,6 +15,9 @@ function MainSide() {
   async function preloadAndCacheModels(nftIds: number[]) {
     // Add new models to cache
     const cache = await caches.open("model-cache");
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+
+    if (isIOS) nftIds = nftIds.slice(0, 2);
     await Promise.all(
       nftIds.map(async (nftId) => {
         const modelUrl = `https://kingdomly-creator-bucket.s3.us-east-2.amazonaws.com/cubhub-glbs/glb-updated/glb/${nftId}.glb`;
