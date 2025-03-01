@@ -19,6 +19,8 @@ function MainSide() {
     console.log(isIOS);
     console.log(navigator.userAgent);
 
+    if (isIOS) return;
+
     await Promise.all(
       nftIds.map(async (nftId) => {
         const modelUrl = `https://kingdomly-creator-bucket.s3.us-east-2.amazonaws.com/cubhub-glbs/glb-updated/glb/${nftId}.glb`;
