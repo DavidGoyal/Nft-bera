@@ -2,7 +2,12 @@
 
 import { getDefaultConfig } from "@rainbow-me/rainbowkit";
 import { http } from "viem";
+import { createStorage } from "wagmi";
 import { berachain } from "wagmi/chains";
+
+const storage = createStorage({
+  storage: typeof window !== "undefined" ? window.localStorage : undefined,
+});
 
 export const config = getDefaultConfig({
   appName: "Cubhub",
@@ -12,4 +17,7 @@ export const config = getDefaultConfig({
   transports: {
     [berachain.id]: http(),
   },
+  storage,
+  // Increase connection timeout
+  pollingInterval: 8000,
 });
