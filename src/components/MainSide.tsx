@@ -5,7 +5,7 @@ import { useAccount } from "wagmi";
 import AnimationsMenu from "./AnimationMenu";
 import MiddleComponent from "./MiddleComponent";
 import { getNFTs } from "@/utils/get-nfts";
-const defaultNftIDS = [81, 82, 83, 84, 85];
+const defaultNftIDS = [91, 92, 93, 94, 95];
 
 // Time in milliseconds to refresh NFT data
 const REFRESH_INTERVAL = 60000; // 1 minute
