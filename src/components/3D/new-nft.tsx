@@ -43,9 +43,13 @@ const ThreeScene = ({ index }: { index: number }) => {
       );
       modelViewer.setAttribute("quick-look-browsers", "safari chrome");
       // Disable features that might cause issues on iOS
-      modelViewer.setAttribute("ar", "false");
+      modelViewer.setAttribute("ar", "true");
+      modelViewer.setAttribute("ar-modes", "scene-viewer quick-look");
+      modelViewer.setAttribute("ar-scale", "auto");
       modelViewer.setAttribute("environment-image", "neutral");
       modelViewer.setAttribute("shadow-intensity", "0");
+      modelViewer.setAttribute("touch-action", "pan-y");
+      modelViewer.setAttribute("disable-pan", "true");
     } else {
       // Full features for other browsers
       modelViewer.setAttribute("ar", "");
