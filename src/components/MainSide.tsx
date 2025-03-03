@@ -71,20 +71,7 @@ function MainSide() {
 
           try {
             // Simple preload with fetch - no caching for iOS
-            if (isIOS) {
-              const response = await fetch(modelUrl, {
-                method: "HEAD",
-                cache: "no-store",
-              });
-
-              if (response.ok) {
-                console.log(`Model ${nftId} preloaded successfully`);
-              } else {
-                console.warn(`Failed to preload model ${nftId}`);
-              }
-            }
-            // Use Cache API for non-iOS platforms
-            else {
+            if (!isIOS) {
               try {
                 const cache = await caches.open("model-cache");
                 const response = await fetch(modelUrl, {
