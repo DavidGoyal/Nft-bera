@@ -6,8 +6,8 @@ function WalletButton() {
     <div className="w-fit h-fit border-2 border-cyan-400 rounded-xl p-[0.5px]">
       <ConnectButton
         showBalance={false}
-        chainStatus={"none"}
-        accountStatus={"address"}
+        chainStatus={{ smallScreen: "icon", largeScreen: "none" }}
+        accountStatus={"full"}
       />
     </div>
   );
