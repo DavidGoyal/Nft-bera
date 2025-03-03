@@ -36,12 +36,10 @@ const ThreeScene = ({ index }: { index: number }) => {
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
 
     if (isIOS) {
-      // Simplified configuration for iOS
-      modelViewer.setAttribute("quick-look-browsers", "safari chrome");
       // Disable features that might cause issues on iOS
-      modelViewer.setAttribute("ar", "");
-      modelViewer.setAttribute("ar-modes", "quick-look");
-      modelViewer.setAttribute("ar-scale", "auto");
+      // modelViewer.setAttribute("ar", "");
+      // modelViewer.setAttribute("ar-modes", "quick-look");
+      // modelViewer.setAttribute("ar-scale", "auto");
       modelViewer.setAttribute("environment-image", "neutral");
       modelViewer.setAttribute("shadow-intensity", "0");
     } else {
@@ -110,7 +108,10 @@ const ThreeScene = ({ index }: { index: number }) => {
       style={{ touchAction: "none" }}
     >
       {isLoading && (
-        <div className="absolute inset-0 flex items-center justify-center">
+        <div
+          className="absolute inset-0 flex items-center justify-center"
+          slot="progress-bar"
+        >
           <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-blue-500"></div>
         </div>
       )}
