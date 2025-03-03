@@ -44,7 +44,7 @@ const ThreeScene = ({ index }: { index: number }) => {
       modelViewer.setAttribute("quick-look-browsers", "safari chrome");
       // Disable features that might cause issues on iOS
       modelViewer.setAttribute("ar", "");
-      modelViewer.setAttribute("ar-modes", "webxr scene-viewer quick-look");
+      modelViewer.setAttribute("ar-modes", "quick-look scene-viewer webxr");
       modelViewer.setAttribute("ar-scale", "auto");
       modelViewer.setAttribute("environment-image", "neutral");
       modelViewer.setAttribute("shadow-intensity", "0");
