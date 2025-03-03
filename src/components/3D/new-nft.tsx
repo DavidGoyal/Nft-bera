@@ -40,6 +40,7 @@ const ThreeScene = ({ index }: { index: number }) => {
       // modelViewer.setAttribute("ar", "");
       // modelViewer.setAttribute("ar-modes", "quick-look");
       // modelViewer.setAttribute("ar-scale", "auto");
+      modelViewer.setAttribute("ar", "false");
       modelViewer.setAttribute("environment-image", "neutral");
       modelViewer.setAttribute("shadow-intensity", "0");
     } else {
