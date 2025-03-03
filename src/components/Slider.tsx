@@ -37,7 +37,9 @@ const Slider = ({ nfts }: { nfts: number[] }) => {
   }, []);
 
   const maxImages = nfts.length;
-  const visibleThumbnails = Math.min(maxImages, 5);
+  const visibleThumbnails = isIOS
+    ? Math.min(maxImages, 3)
+    : Math.min(maxImages, 5);
   let startIndex = Math.max(
     0,
     currentIndex - Math.floor(visibleThumbnails / 2)
