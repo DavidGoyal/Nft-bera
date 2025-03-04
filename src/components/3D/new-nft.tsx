@@ -56,7 +56,6 @@ const ThreeScene = ({ index }: { index: number }) => {
 
     const modelViewer = document.createElement("model-viewer");
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-    const isSmallScreen = window.innerWidth < 768;
 
     modelViewer.setAttribute(
       "src",
@@ -71,9 +70,6 @@ const ThreeScene = ({ index }: { index: number }) => {
       modelViewer.setAttribute("ar-modes", "quick-look");
       modelViewer.setAttribute("loading", "lazy");
       modelViewer.setAttribute("shadow-intensity", "0");
-      if (isSmallScreen) {
-        modelViewer.setAttribute("poster", `/glbimage1.png`);
-      }
     } else {
       modelViewer.setAttribute("ar", "");
       modelViewer.setAttribute("ar-modes", "webxr quick-look");
