@@ -71,6 +71,7 @@ function MainSide() {
 
     console.log("Preloading models for NFTs:", nftIds);
     const isIOS = /iPad|iPhone/.test(navigator.userAgent);
+    setLoading(true);
 
     try {
       await Promise.all(
@@ -101,10 +102,10 @@ function MainSide() {
       );
       hasPreloadedRef.current = true; // Mark as preloaded
       console.log("All models cached successfully");
-      setLoading(false); // Only set to false after all models are cached
     } catch (error) {
       console.error("Error in preloadModels:", error);
-      setLoading(false); // Optionally keep true if you want to retry, or false to proceed
+    } finally {
+      setLoading(false);
     }
   }
 
