@@ -71,26 +71,28 @@ function MainSide() {
 
           try {
             // Simple preload with fetch - no caching for iOS
-            try {
-              const cache = await caches.open("model-cache");
-              const response = await fetch(modelUrl, {
-                method: "GET",
-                cache: "reload",
-                headers: {
-                  Accept: "model/gltf-binary",
-                },
-              });
+            if (!isIOS) {
+              try {
+                const cache = await caches.open("model-cache");
+                const response = await fetch(modelUrl, {
+                  method: "GET",
+                  cache: "reload",
+                  headers: {
+                    Accept: "model/gltf-binary",
+                  },
+                });
 
-              if (response.ok) {
-                await cache.put(modelUrl, response.clone());
-                console.log(`Model ${nftId} cached successfully`);
-              } else {
-                console.warn(`Failed to cache model ${nftId}`);
+                if (response.ok) {
+                  await cache.put(modelUrl, response.clone());
+                  console.log(`Model ${nftId} cached successfully`);
+                } else {
+                  console.warn(`Failed to cache model ${nftId}`);
+                }
+              } catch (cacheError) {
+                console.warn(`Cache API error for model ${nftId}:`, cacheError);
+                // Fallback to regular fetch if Cache API fails
+                await fetch(modelUrl, { method: "HEAD" });
               }
-            } catch (cacheError) {
-              console.warn(`Cache API error for model ${nftId}:`, cacheError);
-              // Fallback to regular fetch if Cache API fails
-              await fetch(modelUrl, { method: "HEAD" });
             }
           } catch (error) {
             console.warn(`Error preloading model ${nftId}:`, error);
