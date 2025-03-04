@@ -36,10 +36,15 @@ function MainSide() {
           lastFetchTimeRef.current = timestamp;
           hasPreloadedRef.current = true; // Assume preloaded if recent
           console.log("Loaded NFTs from localStorage:", storedNfts);
+          // Preload models if not already preloaded
+          preloadModels(storedNfts).catch(() => setLoading(false)); // Fallback to false if preload fails
         }
       } catch (e) {
         console.error("Error parsing stored NFT data:", e);
+        setLoading(false); // Fallback in case of parsing error
       }
+    } else {
+      setLoading(true); // Ensure loading starts as true if no data
     }
   }, [address]);
 
@@ -60,18 +65,19 @@ function MainSide() {
   async function preloadModels(nftIds: number[]) {
     if (hasPreloadedRef.current) {
       console.log("Skipping preload, models already loaded for this session");
+      setLoading(false); // Set loading false since no work is needed
       return;
     }
 
-    // const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
     console.log("Preloading models for NFTs:", nftIds);
+    const isIOS = /iPad|iPhone/.test(navigator.userAgent);
 
     try {
       await Promise.all(
         nftIds.map(async (nftId) => {
           const modelUrl = `https://kingdomly-creator-bucket.s3.us-east-2.amazonaws.com/cubhub-glbs/glb-updated/glb/${nftId}.glb`;
-          try {
-            const cache = await caches.open("model-cache");
+          const cache = await caches.open("model-cache");
+          if (!isIOS) {
             const response = await fetch(modelUrl, {
               method: "GET",
               cache: "reload",
@@ -80,15 +86,25 @@ function MainSide() {
             if (response.ok) {
               await cache.put(modelUrl, response.clone());
               console.log(`Model ${nftId} cached`);
+            } else {
+              throw new Error(`Failed to fetch model ${nftId}`);
             }
-          } catch (error) {
-            console.warn(`Error preloading model ${nftId}:`, error);
+          } else {
+            const response = await fetch(modelUrl, { method: "HEAD" }); // Minimal preload for iOS
+            if (response.ok) {
+              console.log(`Model ${nftId} cached`);
+            } else {
+              throw new Error(`Failed to fetch model ${nftId}`);
+            }
           }
         })
       );
       hasPreloadedRef.current = true; // Mark as preloaded
+      console.log("All models cached successfully");
+      setLoading(false); // Only set to false after all models are cached
     } catch (error) {
       console.error("Error in preloadModels:", error);
+      setLoading(false); // Optionally keep true if you want to retry, or false to proceed
     }
   }
 
@@ -114,17 +130,18 @@ function MainSide() {
 
       if (data.length > 0 && JSON.stringify(data) !== JSON.stringify(nfts)) {
         setNfts(data);
-        await preloadModels(data); // Only preload if NFTs changed
+        await preloadModels(data); // Loading will be set to false inside preloadModels
+      } else {
+        setLoading(false); // No change in NFTs, so no preload needed
       }
 
       lastFetchTimeRef.current = now;
       lastAddressRef.current = address;
     } catch (error) {
       console.error("Error fetching NFTs:", error);
-    } finally {
-      setLoading(false);
+      setLoading(false); // Fallback in case of fetch error
     }
-  }, [address, nfts]); // Include nfts to compare changes
+  }, [address, nfts]);
 
   // Setup and refresh logic
   useEffect(() => {
@@ -142,9 +159,9 @@ function MainSide() {
     } else if (!isConnecting && !isConnected && !address && isDisconnected) {
       if (JSON.stringify(nfts) !== JSON.stringify(defaultNftIDS)) {
         setNfts(defaultNftIDS);
-        preloadModels(defaultNftIDS).finally(() => setLoading(false));
+        preloadModels(defaultNftIDS); // Loading will be set to false inside preloadModels
       } else {
-        setLoading(false); // No need to preload if already default
+        setLoading(false); // No preload needed if already default
       }
     }
 
