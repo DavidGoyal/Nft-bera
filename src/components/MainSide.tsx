@@ -63,7 +63,7 @@ function MainSide() {
       return;
     }
 
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    // const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
     console.log("Preloading models for NFTs:", nftIds);
 
     try {
@@ -71,19 +71,15 @@ function MainSide() {
         nftIds.map(async (nftId) => {
           const modelUrl = `https://kingdomly-creator-bucket.s3.us-east-2.amazonaws.com/cubhub-glbs/glb-updated/glb/${nftId}.glb`;
           try {
-            if (!isIOS) {
-              const cache = await caches.open("model-cache");
-              const response = await fetch(modelUrl, {
-                method: "GET",
-                cache: "reload",
-                headers: { Accept: "model/gltf-binary" },
-              });
-              if (response.ok) {
-                await cache.put(modelUrl, response.clone());
-                console.log(`Model ${nftId} cached`);
-              }
-            } else {
-              await fetch(modelUrl, { method: "HEAD" }); // Minimal preload for iOS
+            const cache = await caches.open("model-cache");
+            const response = await fetch(modelUrl, {
+              method: "GET",
+              cache: "reload",
+              headers: { Accept: "model/gltf-binary" },
+            });
+            if (response.ok) {
+              await cache.put(modelUrl, response.clone());
+              console.log(`Model ${nftId} cached`);
             }
           } catch (error) {
             console.warn(`Error preloading model ${nftId}:`, error);
