@@ -5,9 +5,8 @@ import { useAccount } from "wagmi";
 import AnimationsMenu from "./AnimationMenu";
 import MiddleComponent from "./MiddleComponent";
 import { getNFTs } from "@/utils/get-nfts";
-const defaultNftIDS = [81, 82, 83, 84, 85];
 
-// Time in milliseconds to refresh NFT data
+const defaultNftIDS = [81, 82, 83, 84, 85];
 const REFRESH_INTERVAL = 120000; // 2 minutes
 
 function MainSide() {
@@ -17,10 +16,10 @@ function MainSide() {
   const refreshIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const lastFetchTimeRef = useRef<number>(0);
   const lastAddressRef = useRef<string | undefined>(undefined);
+  const hasPreloadedRef = useRef(false); // Track if models were preloaded
 
-  // Store NFTs in localStorage for persistence
+  // Load from localStorage
   useEffect(() => {
-    // Try to load NFTs from localStorage on initial mount
     const storedData = localStorage.getItem("nft-data");
     if (storedData) {
       try {
@@ -29,13 +28,13 @@ function MainSide() {
           address: storedAddress,
           timestamp,
         } = JSON.parse(storedData);
-        // Only use stored data if it's for the current address and less than 5 minutes old
         if (
           storedAddress === address &&
           Date.now() - timestamp < 5 * 60 * 1000
         ) {
           setNfts(storedNfts);
           lastFetchTimeRef.current = timestamp;
+          hasPreloadedRef.current = true; // Assume preloaded if recent
           console.log("Loaded NFTs from localStorage:", storedNfts);
         }
       } catch (e) {
@@ -44,7 +43,7 @@ function MainSide() {
     }
   }, [address]);
 
-  // Save NFTs to localStorage whenever they change
+  // Save to localStorage
   useEffect(() => {
     if (nfts.length > 0 && nfts !== defaultNftIDS && address) {
       localStorage.setItem(
@@ -59,59 +58,51 @@ function MainSide() {
   }, [nfts, address]);
 
   async function preloadModels(nftIds: number[]) {
+    if (hasPreloadedRef.current) {
+      console.log("Skipping preload, models already loaded for this session");
+      return;
+    }
+
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-    console.log("Device is iOS:", isIOS);
-    console.log("User Agent:", navigator.userAgent);
+    console.log("Preloading models for NFTs:", nftIds);
 
     try {
-      // For iOS, we'll use a simpler preloading approach
       await Promise.all(
         nftIds.map(async (nftId) => {
           const modelUrl = `https://kingdomly-creator-bucket.s3.us-east-2.amazonaws.com/cubhub-glbs/glb-updated/glb/${nftId}.glb`;
-
           try {
-            // Simple preload with fetch - no caching for iOS
             if (!isIOS) {
-              try {
-                const cache = await caches.open("model-cache");
-                const response = await fetch(modelUrl, {
-                  method: "GET",
-                  cache: "reload",
-                  headers: {
-                    Accept: "model/gltf-binary",
-                  },
-                });
-
-                if (response.ok) {
-                  await cache.put(modelUrl, response.clone());
-                  console.log(`Model ${nftId} cached successfully`);
-                } else {
-                  console.warn(`Failed to cache model ${nftId}`);
-                }
-              } catch (cacheError) {
-                console.warn(`Cache API error for model ${nftId}:`, cacheError);
-                // Fallback to regular fetch if Cache API fails
-                await fetch(modelUrl, { method: "HEAD" });
+              const cache = await caches.open("model-cache");
+              const response = await fetch(modelUrl, {
+                method: "GET",
+                cache: "reload",
+                headers: { Accept: "model/gltf-binary" },
+              });
+              if (response.ok) {
+                await cache.put(modelUrl, response.clone());
+                console.log(`Model ${nftId} cached`);
               }
+            } else {
+              await fetch(modelUrl, { method: "HEAD" }); // Minimal preload for iOS
             }
           } catch (error) {
             console.warn(`Error preloading model ${nftId}:`, error);
           }
         })
       );
+      hasPreloadedRef.current = true; // Mark as preloaded
     } catch (error) {
       console.error("Error in preloadModels:", error);
     }
   }
 
-  // Function to fetch NFTs
+  // Fetch NFTs with debounce logic
   const fetchNFTs = useCallback(async () => {
     if (!address) return;
 
-    // Don't fetch if we've fetched recently (within 10 seconds)
     const now = Date.now();
     if (
-      now - lastFetchTimeRef.current < 10000 &&
+      now - lastFetchTimeRef.current < 10000 && // 10s debounce
       lastAddressRef.current === address
     ) {
       console.log("Skipping fetch, too recent");
@@ -125,11 +116,9 @@ function MainSide() {
       const data = await getNFTs({ walletAddress: address });
       console.log("Fetched NFTs:", data);
 
-      if (data.length > 0) {
+      if (data.length > 0 && JSON.stringify(data) !== JSON.stringify(nfts)) {
         setNfts(data);
-        await preloadModels(data);
-      } else {
-        console.warn("No NFTs found for address:", address);
+        await preloadModels(data); // Only preload if NFTs changed
       }
 
       lastFetchTimeRef.current = now;
@@ -139,56 +128,50 @@ function MainSide() {
     } finally {
       setLoading(false);
     }
-  }, [address]);
+  }, [address, nfts]); // Include nfts to compare changes
 
-  // Set up periodic refresh
+  // Setup and refresh logic
   useEffect(() => {
-    // Clear any existing interval
     if (refreshIntervalRef.current) {
       clearInterval(refreshIntervalRef.current);
       refreshIntervalRef.current = null;
     }
 
-    // If connected, set up refresh interval
     if (isConnected && address) {
-      fetchNFTs(); // Fetch immediately
-
-      // Set up interval for periodic refresh
+      fetchNFTs(); // Initial fetch
       refreshIntervalRef.current = setInterval(() => {
         console.log("Refreshing NFT data...");
         fetchNFTs();
       }, REFRESH_INTERVAL);
     } else if (!isConnecting && !isConnected && !address && isDisconnected) {
-      // Use default NFTs when disconnected
-      setNfts(defaultNftIDS);
-      preloadModels(defaultNftIDS).finally(() => {
-        setLoading(false);
-      });
+      if (JSON.stringify(nfts) !== JSON.stringify(defaultNftIDS)) {
+        setNfts(defaultNftIDS);
+        preloadModels(defaultNftIDS).finally(() => setLoading(false));
+      } else {
+        setLoading(false); // No need to preload if already default
+      }
     }
 
-    // Cleanup interval on unmount
     return () => {
       if (refreshIntervalRef.current) {
         clearInterval(refreshIntervalRef.current);
         refreshIntervalRef.current = null;
       }
     };
-  }, [isConnecting, address, isConnected, isDisconnected, fetchNFTs]);
+  }, [isConnecting, address, isConnected, isDisconnected, fetchNFTs, nfts]);
 
-  // Add event listener for visibility change to refresh when tab becomes visible
+  // Visibility change handler
   useEffect(() => {
     const handleVisibilityChange = () => {
       if (document.visibilityState === "visible" && isConnected && address) {
-        console.log("Tab became visible, refreshing NFT data");
+        console.log("Tab visible, checking NFT data");
         fetchNFTs();
       }
     };
 
     document.addEventListener("visibilitychange", handleVisibilityChange);
-
-    return () => {
+    return () =>
       document.removeEventListener("visibilitychange", handleVisibilityChange);
-    };
   }, [isConnected, address, fetchNFTs]);
 
   return (
@@ -196,7 +179,6 @@ function MainSide() {
       <div className="hidden lg:flex lg:col-span-2 h-full flex-col items-start justify-end p-8 gap-14">
         {nfts.length > 0 && <AnimationsMenu />}
       </div>
-
       <MiddleComponent nfts={nfts} loading={loading} />
     </>
   );
