@@ -5,10 +5,10 @@ import { useAccount } from "wagmi";
 import AnimationsMenu from "./AnimationMenu";
 import MiddleComponent from "./MiddleComponent";
 import { getNFTs } from "@/utils/get-nfts";
-const defaultNftIDS = [91, 92, 93, 94, 95];
+const defaultNftIDS = [81, 82, 83, 84, 85];
 
 // Time in milliseconds to refresh NFT data
-const REFRESH_INTERVAL = 60000; // 1 minute
+const REFRESH_INTERVAL = 120000; // 2 minutes
 
 function MainSide() {
   const { isConnecting, address, isConnected, isDisconnected } = useAccount();
@@ -71,28 +71,26 @@ function MainSide() {
 
           try {
             // Simple preload with fetch - no caching for iOS
-            if (!isIOS) {
-              try {
-                const cache = await caches.open("model-cache");
-                const response = await fetch(modelUrl, {
-                  method: "GET",
-                  cache: "reload",
-                  headers: {
-                    Accept: "model/gltf-binary",
-                  },
-                });
+            try {
+              const cache = await caches.open("model-cache");
+              const response = await fetch(modelUrl, {
+                method: "GET",
+                cache: "reload",
+                headers: {
+                  Accept: "model/gltf-binary",
+                },
+              });
 
-                if (response.ok) {
-                  await cache.put(modelUrl, response.clone());
-                  console.log(`Model ${nftId} cached successfully`);
-                } else {
-                  console.warn(`Failed to cache model ${nftId}`);
-                }
-              } catch (cacheError) {
-                console.warn(`Cache API error for model ${nftId}:`, cacheError);
-                // Fallback to regular fetch if Cache API fails
-                await fetch(modelUrl, { method: "HEAD" });
+              if (response.ok) {
+                await cache.put(modelUrl, response.clone());
+                console.log(`Model ${nftId} cached successfully`);
+              } else {
+                console.warn(`Failed to cache model ${nftId}`);
               }
+            } catch (cacheError) {
+              console.warn(`Cache API error for model ${nftId}:`, cacheError);
+              // Fallback to regular fetch if Cache API fails
+              await fetch(modelUrl, { method: "HEAD" });
             }
           } catch (error) {
             console.warn(`Error preloading model ${nftId}:`, error);
