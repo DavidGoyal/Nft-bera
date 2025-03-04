@@ -16,7 +16,7 @@ function MainSide() {
   const refreshIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const lastFetchTimeRef = useRef<number>(0);
   const lastAddressRef = useRef<string | undefined>(undefined);
-  const hasPreloadedRef = useRef(false); // Track if models were preloaded
+  const hasPreloadedRef = useRef(false);
 
   // Load from localStorage
   useEffect(() => {
@@ -34,17 +34,18 @@ function MainSide() {
         ) {
           setNfts(storedNfts);
           lastFetchTimeRef.current = timestamp;
-          hasPreloadedRef.current = true; // Assume preloaded if recent
+          hasPreloadedRef.current = true;
           console.log("Loaded NFTs from localStorage:", storedNfts);
-          // Preload models if not already preloaded
-          preloadModels(storedNfts).catch(() => setLoading(false)); // Fallback to false if preload fails
+          preloadModels(storedNfts); // Loading handled in preloadModels
+        } else {
+          setLoading(true); // Keep loading true if data is stale
         }
       } catch (e) {
         console.error("Error parsing stored NFT data:", e);
-        setLoading(false); // Fallback in case of parsing error
+        // Don't set loading false here, keep it true until successful preload
       }
     } else {
-      setLoading(true); // Ensure loading starts as true if no data
+      setLoading(true); // No data, keep loading true
     }
   }, [address]);
 
@@ -65,7 +66,7 @@ function MainSide() {
   async function preloadModels(nftIds: number[]) {
     if (hasPreloadedRef.current) {
       console.log("Skipping preload, models already loaded for this session");
-      setLoading(false); // Set loading false since no work is needed
+      setLoading(false);
       return;
     }
 
@@ -74,48 +75,72 @@ function MainSide() {
     setLoading(true);
 
     try {
+      let successfulCaches = 0;
+      const totalModels = nftIds.length;
+
       await Promise.all(
         nftIds.map(async (nftId) => {
           const modelUrl = `https://kingdomly-creator-bucket.s3.us-east-2.amazonaws.com/cubhub-glbs/glb-updated/glb/${nftId}.glb`;
-          const cache = await caches.open("model-cache");
-          if (!isIOS) {
-            const response = await fetch(modelUrl, {
-              method: "GET",
-              cache: "reload",
-              headers: { Accept: "model/gltf-binary" },
-            });
-            if (response.ok) {
-              await cache.put(modelUrl, response.clone());
-              console.log(`Model ${nftId} cached`);
+
+          try {
+            if (!isIOS) {
+              const cache = await caches.open("model-cache");
+              const response = await fetch(modelUrl, {
+                method: "GET",
+                cache: "reload",
+                headers: { Accept: "model/gltf-binary" },
+              });
+
+              if (response.ok) {
+                await cache.put(modelUrl, response.clone());
+                console.log(`Model ${nftId} cached successfully`);
+                successfulCaches++;
+              } else {
+                throw new Error(`Failed to fetch model ${nftId}`);
+              }
             } else {
-              throw new Error(`Failed to fetch model ${nftId}`);
+              const response = await fetch(modelUrl, {
+                method: "HEAD",
+                cache: "no-store",
+              });
+
+              if (response.ok) {
+                console.log(`Model ${nftId} verified on iOS`);
+                successfulCaches++;
+              } else {
+                throw new Error(`Failed to verify model ${nftId} on iOS`);
+              }
             }
-          } else {
-            const response = await fetch(modelUrl, { method: "HEAD" }); // Minimal preload for iOS
-            if (response.ok) {
-              console.log(`Model ${nftId} cached`);
-            } else {
-              throw new Error(`Failed to fetch model ${nftId}`);
-            }
+          } catch (error) {
+            console.error(`Error caching model ${nftId}:`, error);
+            throw error;
           }
         })
       );
-      hasPreloadedRef.current = true; // Mark as preloaded
-      console.log("All models cached successfully");
+
+      if (successfulCaches === totalModels) {
+        hasPreloadedRef.current = true;
+        console.log("All models cached successfully");
+        setLoading(false); // Only set false when ALL models are cached
+      } else {
+        console.error(
+          `Failed to cache all models: ${successfulCaches}/${totalModels} succeeded`
+        );
+        // Loading stays true
+      }
     } catch (error) {
       console.error("Error in preloadModels:", error);
-    } finally {
-      setLoading(false);
+      hasPreloadedRef.current = false;
+      // Loading stays true if there's an error
     }
   }
 
-  // Fetch NFTs with debounce logic
   const fetchNFTs = useCallback(async () => {
     if (!address) return;
 
     const now = Date.now();
     if (
-      now - lastFetchTimeRef.current < 10000 && // 10s debounce
+      now - lastFetchTimeRef.current < 10000 &&
       lastAddressRef.current === address
     ) {
       console.log("Skipping fetch, too recent");
@@ -131,20 +156,23 @@ function MainSide() {
 
       if (data.length > 0 && JSON.stringify(data) !== JSON.stringify(nfts)) {
         setNfts(data);
-        await preloadModels(data); // Loading will be set to false inside preloadModels
+        await preloadModels(data); // Loading will only be false if all models cache
       } else {
-        setLoading(false); // No change in NFTs, so no preload needed
+        // If no change in NFTs and we already have them, check if preloaded
+        if (hasPreloadedRef.current) {
+          setLoading(false);
+        }
+        // Otherwise, stay loading true until preload completes
       }
 
       lastFetchTimeRef.current = now;
       lastAddressRef.current = address;
     } catch (error) {
       console.error("Error fetching NFTs:", error);
-      setLoading(false); // Fallback in case of fetch error
+      // Don't set loading false here, keep it true until successful preload
     }
   }, [address, nfts]);
 
-  // Setup and refresh logic
   useEffect(() => {
     if (refreshIntervalRef.current) {
       clearInterval(refreshIntervalRef.current);
@@ -152,7 +180,7 @@ function MainSide() {
     }
 
     if (isConnected && address) {
-      fetchNFTs(); // Initial fetch
+      fetchNFTs();
       refreshIntervalRef.current = setInterval(() => {
         console.log("Refreshing NFT data...");
         fetchNFTs();
@@ -160,10 +188,11 @@ function MainSide() {
     } else if (!isConnecting && !isConnected && !address && isDisconnected) {
       if (JSON.stringify(nfts) !== JSON.stringify(defaultNftIDS)) {
         setNfts(defaultNftIDS);
-        preloadModels(defaultNftIDS); // Loading will be set to false inside preloadModels
-      } else {
-        setLoading(false); // No preload needed if already default
+        preloadModels(defaultNftIDS); // Loading only false if all models cache
+      } else if (hasPreloadedRef.current) {
+        setLoading(false); // Only if already preloaded
       }
+      // Otherwise, stay loading true until default models are cached
     }
 
     return () => {
@@ -174,7 +203,6 @@ function MainSide() {
     };
   }, [isConnecting, address, isConnected, isDisconnected, fetchNFTs, nfts]);
 
-  // Visibility change handler
   useEffect(() => {
     const handleVisibilityChange = () => {
       if (document.visibilityState === "visible" && isConnected && address) {
