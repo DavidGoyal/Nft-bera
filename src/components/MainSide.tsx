@@ -99,17 +99,7 @@ function MainSide() {
                 throw new Error(`Failed to fetch model ${nftId}`);
               }
             } else {
-              const response = await fetch(modelUrl, {
-                method: "HEAD",
-                cache: "no-store",
-              });
-
-              if (response.ok) {
-                console.log(`Model ${nftId} verified on iOS`);
-                successfulCaches++;
-              } else {
-                throw new Error(`Failed to verify model ${nftId} on iOS`);
-              }
+              successfulCaches++;
             }
           } catch (error) {
             console.error(`Error caching model ${nftId}:`, error);
